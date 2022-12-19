@@ -145,10 +145,11 @@ export function svgToCartesian(svgPoint, svgHeight) {
  * @return {Point}
  * @throws RangeError
  * */
+/*
 export function cartesianToSvg(cartesianPoint, svgHeight) {
     if(svgPoint){
         return new Point(cartesianPoint.x, svgHeight-cartesianPoint.y)
     }else{
         throw new RangeError("cartesianPoint is null invalid/empty")
     }
-}
+}*/
