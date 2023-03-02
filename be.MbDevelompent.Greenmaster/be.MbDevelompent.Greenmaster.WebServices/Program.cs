@@ -15,17 +15,17 @@ var app = builder.Build();
 var species = app.MapGroup("/species");
 
 species.MapGet("/", GetAllSpecies);
+species.MapGet("/{id}", GetSpecieWithId);
 
-static async Task<IResult> GetAllSpecies(SpecieDb db)
+static async Task<IResult> GetAllSpecies(SpecieDb db) => TypedResults.Ok(await db.Species.ToListAsync());
+
+static async Task<IResult> GetSpecieWithId(int id,SpecieDb db)
 {
-    return TypedResults.Ok(await db.Species.ToListAsync());
-}
-
-species.MapGet("/{id}", async (int id, SpecieDb db) =>
-    await db.Species.FindAsync(id)
+    return await db.Species.FindAsync(id)
         is Specie specie
         ? Results.Ok(specie)
-        : Results.NotFound());
+        : Results.NotFound();
+}
 
 species.MapPost("/", async (Specie specie, SpecieDb db) =>
 {

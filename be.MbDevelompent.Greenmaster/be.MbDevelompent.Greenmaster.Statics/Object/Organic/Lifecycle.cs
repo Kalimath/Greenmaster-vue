@@ -1,8 +1,10 @@
-﻿namespace be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+﻿using System.Runtime.Serialization;
+
+namespace be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 
 public enum Lifecycle
 {
-    Annual = 0,
-    Perennial = 1,
-    Biennial = 2
+    [EnumMember(Value = "ANNUAL")]Annual,
+    [EnumMember(Value = "PERENNIAL")]Perennial,
+    [EnumMember(Value = "BIENNIAL")]Biennial
 }

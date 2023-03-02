@@ -11,4 +11,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\be.MbDevelompent.Greenmaster.Statics\be.MbDevelompent.Greenmaster.Statics.csproj" />
+    </ItemGroup>
+
 </Project>

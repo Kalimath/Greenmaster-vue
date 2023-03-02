@@ -1,11 +1,13 @@
-﻿namespace be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+﻿using System.Runtime.Serialization;
+
+namespace be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 
 public enum PlantType
 {
-    Hedge,
-    Tree,
-    GroundCover,
-    Bush,
-    Grass,
-    Other
+    [EnumMember(Value = "HEDGE")]Hedge,
+    [EnumMember(Value = "TREE")]Tree,
+    [EnumMember(Value = "GROUNDCOVER")]GroundCover,
+    [EnumMember(Value = "BUSH")]Bush,
+    [EnumMember(Value = "GRASS")]Grass,
+    [EnumMember(Value = "OTHER")]Other
 }

@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "bs5LQaH+OTmZpV7a0RO/DgDcAHs7xh1uICtUai1F6IbJg2WKly8vmp8qnLkCaScGaCXFvzh4YEbCrJFXc9LwhQ==",
+  "dgSpecHash": "TkGi4BJjiGoce5D4uYg3gw/+2Bsi3lGVEsS0+T1RSO8Jq1dmS1ffT21WEIFch3Badpe8RV40B50OvQL1BjIG4Q==",
   "success": true,
   "projectFilePath": "D:\\Hobby\\Software\\Greenmaster-vue\\be.MbDevelompent.Greenmaster\\be.MbDevelompent.Greenmaster.WebServices\\be.MbDevelompent.Greenmaster.WebServices.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\mathi\\.nuget\\packages\\identity.core\\1.2.7\\identity.core.1.2.7.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.12\\microsoft.aspnetcore.cryptography.internal.6.0.12.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.12\\microsoft.aspnetcore.cryptography.keyderivation.6.0.12.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.aspnetcore.diagnostics.entityframeworkcore\\7.0.3\\microsoft.aspnetcore.diagnostics.entityframeworkcore.7.0.3.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\6.0.12\\microsoft.aspnetcore.identity.entityframeworkcore.6.0.12.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.3\\microsoft.entityframeworkcore.7.0.3.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.3\\microsoft.entityframeworkcore.abstractions.7.0.3.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.3\\microsoft.entityframeworkcore.analyzers.7.0.3.nupkg.sha512",
@@ -12,13 +16,17 @@
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.3\\microsoft.entityframeworkcore.relational.7.0.3.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.configuration\\7.0.0\\microsoft.extensions.configuration.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.identity.core\\6.0.12\\microsoft.extensions.identity.core.6.0.12.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.identity.stores\\6.0.12\\microsoft.extensions.identity.stores.6.0.12.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.logging\\7.0.0\\microsoft.extensions.logging.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.0\\microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
-    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+    "C:\\Users\\mathi\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "C:\\Users\\mathi\\.nuget\\packages\\system.componentmodel.annotations\\4.5.0\\system.componentmodel.annotations.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }
