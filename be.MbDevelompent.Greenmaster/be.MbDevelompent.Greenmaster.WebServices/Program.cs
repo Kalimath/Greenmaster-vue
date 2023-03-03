@@ -17,6 +17,7 @@ var species = app.MapGroup("/species");
 species.MapGet("/", GetAllSpecies);
 species.MapGet("/{id}", GetSpecieWithId);
 species.MapPost("/", AddSpecie);
+species.MapPut("/{id}", UpdateSpecie);
 
 static async Task<IResult> GetAllSpecies(SpecieDb db) => TypedResults.Ok(await db.Species.ToListAsync());
 
@@ -36,28 +37,19 @@ static async Task<IResult> AddSpecie(Specie specie,SpecieDb db)
     return Results.Created($"/species/{specie.Id}", specie);
 }
 
-/*
-species.MapPost("/", async (Specie specie, SpecieDb db) =>
-{
-    db.Species.Add(specie);
-    await db.SaveChangesAsync();
-
-    return Results.Created($"/species/{specie.Id}", specie);
-});*/
-
-species.MapPut("/{id}", async (int id, Specie inputSpecie, SpecieDb db) =>
+static async Task<IResult> UpdateSpecie(int id, Specie inputSpecie, SpecieDb db)
 {
     var specie = await db.Species.FindAsync(id);
 
-    if (specie is null) return Results.NotFound();
+    if (specie is null) return TypedResults.NotFound();
 
     specie.Name = inputSpecie.Name;
     specie.ScientificName = inputSpecie.ScientificName;
 
     await db.SaveChangesAsync();
 
-    return Results.NoContent();
-});
+    return TypedResults.Ok();
+}
 
 species.MapDelete("/{id}", async (int id, SpecieDb db) =>
 {
