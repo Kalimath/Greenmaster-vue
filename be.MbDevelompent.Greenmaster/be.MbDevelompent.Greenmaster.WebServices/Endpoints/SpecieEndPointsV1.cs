@@ -51,23 +51,18 @@ public static class SpecieEndPointsV1
     public static async Task<IResult> UpdateSpecie(int id, SpecieDTO specieDTO, ISpecieService specieService)
     {
         var specie = await specieService.Find(id);
-
         if (specie is null) return TypedResults.NotFound();
         
         await specieService.Update(new Specie(specieDTO));
-
         return TypedResults.Ok();
     }
 
-    public static async Task<IResult> DeleteSpecie(int id, SpecieDb db)
+    public static async Task<IResult> DeleteSpecie(int id, ISpecieService specieService)
     {
-        if (await db.Species.FindAsync(id) is Specie specie)
-        {
-            db.Species.Remove(specie);
-            await db.SaveChangesAsync();
-            return TypedResults.Ok(specie);
-        }
-
-        return TypedResults.NotFound();
+        var specie = await specieService.Find(id);
+        if (specie == null) return TypedResults.NotFound();
+        
+        await specieService.Remove(specie);
+        return TypedResults.NoContent();
     }
 }

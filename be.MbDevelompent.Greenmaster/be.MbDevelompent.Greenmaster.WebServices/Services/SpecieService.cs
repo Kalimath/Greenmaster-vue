@@ -34,4 +34,10 @@ public class SpecieService : ISpecieService
         _specieDb.Species.Update(specie);
         await _specieDb.SaveChangesAsync();
     }
+
+    public async Task Remove(Specie specie)
+    {
+        _specieDb.Species.Remove(specie);
+        await _specieDb.SaveChangesAsync();
+    }
 }

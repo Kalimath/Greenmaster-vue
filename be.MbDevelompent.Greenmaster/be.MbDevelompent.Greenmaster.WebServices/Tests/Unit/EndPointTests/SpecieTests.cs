@@ -166,7 +166,6 @@ public class SpecieTests
      public async Task UpdateSpecie_ReturnsNotFound_WhenSpecieNull()
      {
          //Arrange
-
          var updatedSpecie = new Specie()
          {
              Id = 1,
@@ -185,5 +184,21 @@ public class SpecieTests
 
          await _mockedSpecieService.Received(1).Find(_specieBuxus.Id);
          await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
+     }
+     
+     [Fact]
+     public async Task DeleteTodoDeletesTodoInDatabase()
+     {
+         //Arrange
+         _mockedSpecieService.Find(_specieBuxus.Id).Returns(_specieBuxus);
+         _mockedSpecieService.Remove(_specieBuxus).Returns(Task.CompletedTask);
+
+         //Act
+         var noContentResult = (NoContent)await SpecieEndPointsV1.DeleteSpecie(_specieBuxus.Id, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(204, noContentResult.StatusCode);
+
+         await _mockedSpecieService.Received(1).Remove(Arg.Any<Specie>());
      }
 }

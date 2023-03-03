@@ -8,4 +8,5 @@ public interface ISpecieService
     Task<List<Specie>> GetAll();
     Task Add(Specie specie);
     Task Update(Specie specie);
+    Task Remove(Specie specie);
 }
