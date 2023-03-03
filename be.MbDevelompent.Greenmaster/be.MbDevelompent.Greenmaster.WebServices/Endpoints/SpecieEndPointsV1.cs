@@ -1,6 +1,7 @@
 ﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
+using be.MbDevelompent.Greenmaster.WebServices.Services;
 using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,9 +20,9 @@ public static class SpecieEndPointsV1
         return group;
     }
 
-    public static async Task<IResult> GetAllSpecies(SpecieDb db)
+    public static async Task<IResult> GetAllSpecies(ISpecieService specieService)
     {
-        return TypedResults.Ok(await db.Species.Select(x => new SpecieDTO(x)).ToArrayAsync());
+        return TypedResults.Ok((await specieService.GetAll()).Select(x => new SpecieDTO(x)).ToArray());
     }
 
     public static async Task<IResult> GetSpecieWithId(int id, ISpecieService specieService)

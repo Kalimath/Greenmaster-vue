@@ -1,6 +1,7 @@
-using be.MbDevelompent.Greenmaster.WebServices;
 using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
+using be.MbDevelompent.Greenmaster.WebServices.Services;
+using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable TooManyChainedReferences
 
@@ -9,6 +10,7 @@ var services = builder.Services;
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<ISpecieService, SpecieService>();
 
 // services
 services.AddDbContext<SpecieDb>(opt => opt.UseInMemoryDatabase("SpecieList"));
