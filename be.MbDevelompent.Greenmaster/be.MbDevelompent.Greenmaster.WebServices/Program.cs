@@ -1,6 +1,8 @@
 using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
+using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+// ReSharper disable TooManyChainedReferences
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -20,7 +22,10 @@ species.MapPost("/", AddSpecie);
 species.MapPut("/{id}", UpdateSpecie);
 species.MapDelete("/{id}", DeleteSpecie);
 
-static async Task<IResult> GetAllSpecies(SpecieDb db) => TypedResults.Ok(await db.Species.ToListAsync());
+static async Task<IResult> GetAllSpecies(SpecieDb db)
+{
+    return TypedResults.Ok(await db.Species.Select(x => new SpecieDTO(x)).ToArrayAsync());
+}
 
 static async Task<IResult> GetSpecieWithId(int id,SpecieDb db)
 {
