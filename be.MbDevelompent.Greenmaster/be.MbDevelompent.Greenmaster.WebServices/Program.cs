@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // services
 services.AddDbContext<SpecieDb>(opt => opt.UseInMemoryDatabase("SpecieList"));
 services.AddDatabaseDeveloperPageExceptionFilter();
@@ -14,13 +17,24 @@ services.AddDatabaseDeveloperPageExceptionFilter();
 // app
 var app = builder.Build();    
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Greenmaster API V1");
+        c.RoutePrefix = String.Empty;
+    });
+}
+app.UseHttpsRedirection();
+
 var species = app.MapGroup("/species");
 
-species.MapGet("/", GetAllSpecies);
-species.MapGet("/{id}", GetSpecieWithId);
-species.MapPost("/", AddSpecie);
-species.MapPut("/{id}", UpdateSpecie);
-species.MapDelete("/{id}", DeleteSpecie);
+species.MapGet("/", GetAllSpecies).WithName("GetAllSpecies").WithOpenApi();
+species.MapGet("/{id}", GetSpecieWithId).WithName("GetSpecieWithId").WithOpenApi();
+species.MapPost("/", AddSpecie).WithName("AddSpecie").Accepts<SpecieDTO>("application/json").WithOpenApi();
+species.MapPut("/{id}", UpdateSpecie).WithName("UpdateSpecie").WithOpenApi();
+species.MapDelete("/{id}", DeleteSpecie).WithName("DeleteSpecie").WithOpenApi();
 
 static async Task<IResult> GetAllSpecies(SpecieDb db)
 {
