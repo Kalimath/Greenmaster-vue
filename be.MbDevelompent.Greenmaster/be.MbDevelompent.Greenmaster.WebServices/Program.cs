@@ -53,14 +53,16 @@ static async Task<IResult> AddSpecie(SpecieDTO specieDTO,SpecieDb db)
     return Results.Created($"/species/{specieDTO.Id}", specieDTO);
 }
 
-static async Task<IResult> UpdateSpecie(int id, Specie inputSpecie, SpecieDb db)
+static async Task<IResult> UpdateSpecie(int id, SpecieDTO specieDTO, SpecieDb db)
 {
     var specie = await db.Species.FindAsync(id);
 
     if (specie is null) return TypedResults.NotFound();
 
-    specie.Name = inputSpecie.Name;
-    specie.ScientificName = inputSpecie.ScientificName;
+    specie.Name = specieDTO.Name;
+    specie.ScientificName = specieDTO.ScientificName;
+    specie.Type = specieDTO.Type;
+    specie.Cycle = specieDTO.Cycle;
 
     await db.SaveChangesAsync();
 
