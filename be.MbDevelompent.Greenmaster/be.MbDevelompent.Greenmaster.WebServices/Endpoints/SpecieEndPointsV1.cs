@@ -1,6 +1,7 @@
 ﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
+using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
 using Microsoft.EntityFrameworkCore;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Endpoints;
@@ -23,12 +24,10 @@ public static class SpecieEndPointsV1
         return TypedResults.Ok(await db.Species.Select(x => new SpecieDTO(x)).ToArrayAsync());
     }
 
-    public static async Task<IResult> GetSpecieWithId(int id, SpecieDb db)
+    public static async Task<IResult> GetSpecieWithId(int id, ISpecieService specieService)
     {
-        return await db.Species.FindAsync(id)
-            is Specie specie
-            ? Results.Ok(new SpecieDTO(specie))
-            : Results.NotFound();
+        var specie = await specieService.Find(id);
+        return specie != null ? Results.Ok(new SpecieDTO(specie)) : Results.NotFound();
     }
 
     public static async Task<IResult> AddSpecie(SpecieDTO specieDTO, SpecieDb db)
