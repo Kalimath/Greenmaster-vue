@@ -35,12 +35,22 @@ static async Task<IResult> GetSpecieWithId(int id, SpecieDb db)
         : Results.NotFound();
 }
 
-static async Task<IResult> AddSpecie(Specie specie,SpecieDb db)
+static async Task<IResult> AddSpecie(SpecieDTO specieDTO,SpecieDb db)
 {
-    db.Species.Add(specie);
+    var specieItem = new Specie()
+    {
+        ScientificName = specieDTO.ScientificName,
+        Name = specieDTO.Name,
+        Type = specieDTO.Type,
+        Cycle = specieDTO.Cycle
+    };
+    
+    db.Species.Add(specieItem);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/species/{specie.Id}", specie);
+    specieDTO = new SpecieDTO(specieItem);
+
+    return Results.Created($"/species/{specieDTO.Id}", specieDTO);
 }
 
 static async Task<IResult> UpdateSpecie(int id, Specie inputSpecie, SpecieDb db)
