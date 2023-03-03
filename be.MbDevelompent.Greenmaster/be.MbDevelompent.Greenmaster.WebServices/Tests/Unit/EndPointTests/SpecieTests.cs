@@ -136,4 +136,54 @@ public class SpecieTests
 
          await _mockedSpecieService.Received(1).Add(Arg.Any<Specie>());
      }
+     
+     [Fact]
+     public async Task UpdateSpecie_UpdatesSpecieInDatabase()
+     {
+         //Arrange
+         var existingSpecie = (Specie)_specieBuxus;
+
+         var updatedSpecie = new Specie()
+         {
+             Id = 1,
+             ScientificName = "Buxus 2",
+             Name = "Boxwood",
+             Type = PlantType.Tree.ToString(),
+             Cycle = Lifecycle.Biennial.ToString()
+         };
+
+         _mockedSpecieService.Update(updatedSpecie).Returns(Task.CompletedTask);
+
+         //Act
+         var updatedResult = (Ok)await SpecieEndPointsV1.UpdateSpecie(existingSpecie.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(StatusCodes.Status200OK, updatedResult.StatusCode);
+
+         await _mockedSpecieService.Received(1).Update(Arg.Any<Specie>());
+     }  
+     [Fact]
+     public async Task UpdateSpecie_ReturnsNotFound_WhenSpecieNull()
+     {
+         //Arrange
+
+         var updatedSpecie = new Specie()
+         {
+             Id = 1,
+             ScientificName = "Buxus 2",
+             Name = "Boxwood",
+             Type = PlantType.Tree.ToString(),
+             Cycle = Lifecycle.Biennial.ToString()
+         };
+         _mockedSpecieService.Find(_specieBuxus.Id).Returns((Specie?)null);
+
+         //Act
+         var updatedResult = (NotFound)await SpecieEndPointsV1.UpdateSpecie(_specieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(StatusCodes.Status404NotFound, updatedResult.StatusCode);
+
+         await _mockedSpecieService.Received(1).Find(_specieBuxus.Id);
+         await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
+     }
 }

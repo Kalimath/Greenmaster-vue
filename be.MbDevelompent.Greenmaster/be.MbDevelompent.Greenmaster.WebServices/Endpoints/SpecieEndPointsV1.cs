@@ -48,18 +48,13 @@ public static class SpecieEndPointsV1
         return Results.Created($"/species/{specieDTO.Id}", specieDTO);
     }
 
-    public static async Task<IResult> UpdateSpecie(int id, SpecieDTO specieDTO, SpecieDb db)
+    public static async Task<IResult> UpdateSpecie(int id, SpecieDTO specieDTO, ISpecieService specieService)
     {
-        var specie = await db.Species.FindAsync(id);
+        var specie = await specieService.Find(id);
 
         if (specie is null) return TypedResults.NotFound();
-
-        specie.Name = specieDTO.Name;
-        specie.ScientificName = specieDTO.ScientificName;
-        specie.Type = specieDTO.Type;
-        specie.Cycle = specieDTO.Cycle;
-
-        await db.SaveChangesAsync();
+        
+        await specieService.Update(new Specie(specieDTO));
 
         return TypedResults.Ok();
     }

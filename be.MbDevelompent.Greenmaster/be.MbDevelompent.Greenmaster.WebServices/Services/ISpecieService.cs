@@ -7,4 +7,5 @@ public interface ISpecieService
     ValueTask<Specie?> Find(int id);
     Task<List<Specie>> GetAll();
     Task Add(Specie specie);
+    Task Update(Specie specie);
 }

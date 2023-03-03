@@ -28,4 +28,10 @@ public class SpecieService : ISpecieService
         await _specieDb.Species.AddAsync(specie);
         await _specieDb.SaveChangesAsync();
     }
+
+    public async Task Update(Specie specie)
+    {
+        _specieDb.Species.Update(specie);
+        await _specieDb.SaveChangesAsync();
+    }
 }

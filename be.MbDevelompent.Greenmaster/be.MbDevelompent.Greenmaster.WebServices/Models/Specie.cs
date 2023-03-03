@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Models;
 
@@ -21,5 +22,19 @@ public class Specie
     {
         get => _cycle;
         set => _cycle = Enum.IsDefined(typeof(Lifecycle), value) ? value : throw new InvalidEnumArgumentException();
+    }
+
+    public Specie()
+    {
+        
+    }
+    
+    public Specie(SpecieDTO specieDTO)
+    {
+        Id = specieDTO.Id;
+        ScientificName = specieDTO.ScientificName;
+        Name = specieDTO.Name;
+        _cycle = specieDTO.Cycle;
+        _type = specieDTO.Type;
     }
 }
