@@ -56,20 +56,7 @@ public class SpecieTests
          // Assert: Check for the correct returned type
          Assert.IsType<Ok<SpecieDTO[]>>(result);
      }
-     
-     [Fact]
-     public async Task GetSpecieReturnsNotFoundIfNotExists()
-     {
-         // Arrange
-         _mockedSpecieService.Find(Arg.Any<int>()).Returns((Specie?)null);
 
-         // Act
-         var notFoundResult = (NotFound)await SpecieEndPointsV1.GetSpecieWithId(1, _mockedSpecieService);
-
-         //Assert
-         Assert.Equal(404, notFoundResult.StatusCode);
-     }
-     
      [Fact]
      public async Task GetAllReturnsSpeciesFromDatabase()
      {
@@ -100,5 +87,34 @@ public class SpecieTests
              Assert.Equal(_specieStrelitzia.Type, specie2.Type);
              Assert.Equal(_specieStrelitzia.Cycle, specie2.Cycle);
          });
+     }
+     
+     [Fact]
+     public async Task GetSpecieReturnsNotFoundIfNotExists()
+     {
+         // Arrange
+         _mockedSpecieService.Find(Arg.Any<int>()).Returns((Specie?)null);
+
+         // Act
+         var notFoundResult = (NotFound)await SpecieEndPointsV1.GetSpecieWithId(1, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(404, notFoundResult.StatusCode);
+     }
+     
+     [Fact]
+     public async Task GetSpecieReturnsSpecieFromDatabase()
+     {
+         // Arrange
+         _mockedSpecieService.Find(1)
+             .Returns(_specieBuxus);
+
+         // Act
+         var okResult = (Ok<SpecieDTO>)await SpecieEndPointsV1.GetSpecieWithId(1, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(200, okResult.StatusCode);
+         var foundSpecie = Assert.IsAssignableFrom<SpecieDTO>(okResult.Value);
+         Assert.Equal(1, foundSpecie.Id);
      }
 }
