@@ -31,7 +31,7 @@ public static class SpecieEndPointsV1
         return specie != null ? Results.Ok(new SpecieDTO(specie)) : Results.NotFound();
     }
 
-    public static async Task<IResult> AddSpecie(SpecieDTO specieDTO, SpecieDb db)
+    public static async Task<IResult> AddSpecie(SpecieDTO specieDTO, ISpecieService specieService)
     {
         var specieItem = new Specie()
         {
@@ -41,8 +41,7 @@ public static class SpecieEndPointsV1
             Cycle = specieDTO.Cycle
         };
 
-        db.Species.Add(specieItem);
-        await db.SaveChangesAsync();
+        await specieService.Add(specieItem);
 
         specieDTO = new SpecieDTO(specieItem);
 

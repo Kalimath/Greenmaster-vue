@@ -1,7 +1,6 @@
 using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
-using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable TooManyChainedReferences
 

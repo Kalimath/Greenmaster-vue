@@ -1,6 +1,6 @@
 ﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
-using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
+using Microsoft.EntityFrameworkCore;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Services;
 
@@ -13,13 +13,19 @@ public class SpecieService : ISpecieService
         _specieDb = specieDb;
     }
     
-    public async ValueTask<Specie?> Find(int any)
+    public async ValueTask<Specie?> Find(int id)
     {
-        throw new NotImplementedException();
+        return await _specieDb.Species.FindAsync(id);
     }
 
     public async Task<List<Specie>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _specieDb.Species.ToListAsync();
+    }
+
+    public async Task Add(Specie specie)
+    {
+        await _specieDb.Species.AddAsync(specie);
+        await _specieDb.SaveChangesAsync();
     }
 }

@@ -8,6 +8,7 @@ using be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 using Xunit;
+// ReSharper disable MethodTooLong
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
 
@@ -58,7 +59,7 @@ public class SpecieTests
      }
 
      [Fact]
-     public async Task GetAllReturnsSpeciesFromDatabase()
+     public async Task GetAllSpecies_ReturnsSpeciesFromDatabase()
      {
          // Arrange
          _mockedSpecieService.GetAll().Returns(_species);
@@ -90,7 +91,7 @@ public class SpecieTests
      }
      
      [Fact]
-     public async Task GetSpecieReturnsNotFoundIfNotExists()
+     public async Task GetSpecieWithId_ReturnsNotFoundIfNotExists()
      {
          // Arrange
          _mockedSpecieService.Find(Arg.Any<int>()).Returns((Specie?)null);
@@ -103,7 +104,7 @@ public class SpecieTests
      }
      
      [Fact]
-     public async Task GetSpecieReturnsSpecieFromDatabase()
+     public async Task GetSpecieWithId_ReturnsSpecieFromDatabase()
      {
          // Arrange
          _mockedSpecieService.Find(1)
@@ -116,5 +117,23 @@ public class SpecieTests
          Assert.Equal(200, okResult.StatusCode);
          var foundSpecie = Assert.IsAssignableFrom<SpecieDTO>(okResult.Value);
          Assert.Equal(1, foundSpecie.Id);
+     }
+     
+     [Fact]
+     public async Task AddSpecie_CreatesSpecieInDatabase()
+     {
+         //Arrange
+         var newSpecie = new SpecieDTO(_specieBuxus);
+         _mockedSpecieService.Add(_specieBuxus).Returns(Task.CompletedTask);
+
+         //Act
+         var createdResult = (Created<SpecieDTO>)await SpecieEndPointsV1.AddSpecie(newSpecie, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(201, createdResult.StatusCode);
+         Assert.NotNull(createdResult.Location);
+         Assert.IsAssignableFrom<SpecieDTO>(createdResult.Value);
+
+         await _mockedSpecieService.Received(1).Add(Arg.Any<Specie>());
      }
 }
