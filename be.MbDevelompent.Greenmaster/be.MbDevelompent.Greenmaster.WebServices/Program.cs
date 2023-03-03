@@ -27,11 +27,11 @@ static async Task<IResult> GetAllSpecies(SpecieDb db)
     return TypedResults.Ok(await db.Species.Select(x => new SpecieDTO(x)).ToArrayAsync());
 }
 
-static async Task<IResult> GetSpecieWithId(int id,SpecieDb db)
+static async Task<IResult> GetSpecieWithId(int id, SpecieDb db)
 {
     return await db.Species.FindAsync(id)
         is Specie specie
-        ? Results.Ok(specie)
+        ? Results.Ok(new SpecieDTO(specie))
         : Results.NotFound();
 }
 
