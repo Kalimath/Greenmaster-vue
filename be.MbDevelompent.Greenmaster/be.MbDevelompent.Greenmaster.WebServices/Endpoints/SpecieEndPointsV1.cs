@@ -31,28 +31,24 @@ public static class SpecieEndPointsV1
         return specie != null ? Results.Ok(new SpecieDTO(specie)) : Results.NotFound();
     }
 
+    
     public static async Task<IResult> AddSpecie(SpecieDTO specieDTO, ISpecieService specieService)
     {
-        var specieItem = new Specie()
-        {
-            ScientificName = specieDTO.ScientificName,
-            Name = specieDTO.Name,
-            Type = specieDTO.Type,
-            Cycle = specieDTO.Cycle
-        };
+        var specieItem = new Specie(specieDTO);
 
+        if (await specieService.ExistsWithScientificName(specieItem.ScientificName))
+            return Results.Conflict($"Specie with {nameof(specieItem.ScientificName)} already exists");
+        
         await specieService.Add(specieItem);
-
         specieDTO = new SpecieDTO(specieItem);
-
         return Results.Created($"/species/{specieDTO.Id}", specieDTO);
+
     }
 
     public static async Task<IResult> UpdateSpecie(int id, SpecieDTO specieDTO, ISpecieService specieService)
     {
         var specie = await specieService.Find(id);
         if (specie is null) return TypedResults.NotFound();
-        
         await specieService.Update(new Specie(specieDTO));
         return TypedResults.Ok();
     }

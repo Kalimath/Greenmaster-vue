@@ -40,4 +40,10 @@ public class SpecieService : ISpecieService
         _specieDb.Species.Remove(specie);
         await _specieDb.SaveChangesAsync();
     }
+
+    public Task<bool> ExistsWithScientificName(string scientificName)
+    {
+        //TODO: validate scientificName
+        return Task.FromResult(_specieDb.Species.Any(specie => specie.ScientificName.ToLower() == scientificName.ToLower().Trim()));
+    }
 }

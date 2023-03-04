@@ -6,6 +6,7 @@ using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
 using be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Xunit;
 // ReSharper disable MethodTooLong
@@ -138,10 +139,25 @@ public class SpecieTests
      }
      
      [Fact]
+     public async Task AddSpecie_DoesNotAdd_WhenSpecieInDatabase()
+     {
+         //Arrange
+         var newSpecie = new SpecieDTO(_specieBuxus);
+         _mockedSpecieService.ExistsWithScientificName(_specieBuxus.ScientificName).Returns(true);
+
+         //Act
+         var result = (Conflict<string>) await SpecieEndPointsV1.AddSpecie(newSpecie, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(StatusCodes.Status409Conflict, result.StatusCode);
+         await _mockedSpecieService.Received(0).Add(Arg.Any<Specie>());
+     }
+     
+     [Fact]
      public async Task UpdateSpecie_UpdatesSpecieInDatabase()
      {
          //Arrange
-         var existingSpecie = (Specie)_specieBuxus;
+         var existingSpecie = _specieBuxus;
 
          var updatedSpecie = new Specie()
          {
@@ -151,7 +167,7 @@ public class SpecieTests
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
-
+         _mockedSpecieService.Find(_specieBuxus.Id).Returns(_specieBuxus);
          _mockedSpecieService.Update(updatedSpecie).Returns(Task.CompletedTask);
 
          //Act
