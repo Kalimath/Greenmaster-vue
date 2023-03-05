@@ -27,7 +27,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Greenmaster API V1");
-        c.RoutePrefix = String.Empty;
+        c.RoutePrefix = string.Empty;
     });
     SeedData(app);
 }

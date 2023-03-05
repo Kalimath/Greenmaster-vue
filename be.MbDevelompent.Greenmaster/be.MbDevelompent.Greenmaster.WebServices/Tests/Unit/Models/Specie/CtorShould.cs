@@ -26,7 +26,7 @@ public class CtorShould
         {
             var specieDTO = new SpecieDTO()
             {
-                ScientificName = SpecieBuxus.ScientificName,
+                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -43,7 +43,7 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = string.Empty,
-                ScientificName = SpecieBuxus.ScientificName,
+                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -60,7 +60,7 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = "  ",
-                ScientificName = SpecieBuxus.ScientificName,
+                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -82,7 +82,8 @@ public class CtorShould
         var specieDTO = new SpecieDTO()
         {
             Genus = SpecieBuxus.Genus.ToLower(),
-            ScientificName = SpecieBuxus.ScientificName,
+            Species = SpecieBuxus.Species,
+            ScientificName = SpecieBuxus.GetScientificName(),
             Name = SpecieBuxus.Name,
             Cycle = SpecieBuxus.Cycle,
             Type = SpecieBuxus.Type
@@ -90,12 +91,89 @@ public class CtorShould
         var createdSpecie = new WebServices.Models.Specie(specieDTO);
         Assert.Equal(SpecieBuxusDTO.Genus, createdSpecie.Genus);
     }
+    
+    [Fact]
+    public void ThrowArgumentException_WhenSpecieDtoSpeciesNull()
+    {
+        Assert.Throws<ArgumentException>((() =>
+        {
+            var specieDTO = new SpecieDTO()
+            {
+                Genus = SpecieBuxus.Genus,
+                Species = null!,
+                ScientificName = SpecieBuxus.GetScientificName(),
+                Name = SpecieBuxus.Name,
+                Cycle = SpecieBuxus.Cycle,
+                Type = SpecieBuxus.Type
+            };
+            return new WebServices.Models.Specie(specieDTO);
+        }));
+    }
 
     [Fact]
-    public void SetScientificNameToDtoScientificName_WhenCalled()
+    public void ThrowArgumentException_WhenSpecieDtoSpeciesEmpty()
+    {
+        Assert.Throws<ArgumentException>((() =>
+        {
+            var specieDTO = new SpecieDTO()
+            {
+                Genus = SpecieBuxus.Genus,
+                Species = string.Empty,
+                ScientificName = SpecieBuxus.GetScientificName(),
+                Name = SpecieBuxus.Name,
+                Cycle = SpecieBuxus.Cycle,
+                Type = SpecieBuxus.Type
+            };
+            return new WebServices.Models.Specie(specieDTO);
+        }));
+    }
+
+    [Fact]
+    public void ThrowArgumentException_WhenSpecieDtoSpeciesWhitespace()
+    {
+        Assert.Throws<ArgumentException>((() =>
+        {
+            var specieDTO = new SpecieDTO()
+            {
+                Genus = SpecieBuxus.Genus,
+                Species = "  ",
+                ScientificName = SpecieBuxus.GetScientificName(),
+                Name = SpecieBuxus.Name,
+                Cycle = SpecieBuxus.Cycle,
+                Type = SpecieBuxus.Type
+            };
+            return new WebServices.Models.Specie(specieDTO);
+        }));
+    }
+
+    [Fact]
+    public void SetSpeciesToDtoSpecies_WhenCalled()
     {
         var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
-        Assert.Equal(SpecieBuxusDTO.ScientificName, createdSpecie.ScientificName);
+        Assert.Equal(SpecieBuxusDTO.Species, createdSpecie.Species);
+    }
+    
+    [Fact]
+    public void CapitaliseSetSpecies_WhenCalled()
+    {
+        var specieDTO = new SpecieDTO()
+        {
+            Genus = SpecieBuxus.Genus,
+            Species = SpecieBuxus.Species.ToLower(),
+            ScientificName = SpecieBuxus.GetScientificName(),
+            Name = SpecieBuxus.Name,
+            Cycle = SpecieBuxus.Cycle,
+            Type = SpecieBuxus.Type
+        };
+        var createdSpecie = new WebServices.Models.Specie(specieDTO);
+        Assert.Equal(SpecieBuxusDTO.Species, createdSpecie.Species);
+    }
+
+    [Fact]
+    public void SetScientificName_WhenCalled()
+    {
+        var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
+        Assert.Equal($"{SpecieBuxus.Genus} {SpecieBuxus.Species}", createdSpecie.GetScientificName());
     }
 
     [Fact]

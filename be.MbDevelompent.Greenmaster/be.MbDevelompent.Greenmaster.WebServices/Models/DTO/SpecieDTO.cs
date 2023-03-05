@@ -9,6 +9,7 @@ public class SpecieDTO
     private string _type;
     public int Id { get; set; }
     public string Genus { get; set; }
+    public string Species { get; set; }
     public string ScientificName { get; set; }
     public string? Name { get; set; }
 
@@ -23,8 +24,7 @@ public class SpecieDTO
         get => _cycle;
         set => _cycle = Enum.IsDefined(typeof(Lifecycle), value) ? value : throw new InvalidEnumArgumentException();
     }
-
-
+    
     public SpecieDTO() { }
     public SpecieDTO(Specie specie)
     {
@@ -34,7 +34,10 @@ public class SpecieDTO
         if (string.IsNullOrEmpty(specie.Genus?.Trim()))
             throw new ArgumentException(nameof(specie.Genus));
         Genus = specie.Genus;
-        ScientificName = specie.ScientificName;
+        if (string.IsNullOrEmpty(specie.Species?.Trim()))
+            throw new ArgumentException(nameof(specie.Species));
+        Species = specie.Species;
+        ScientificName = $"{specie.Genus} {specie.Species}";
         Name = specie.Name;
         Type = specie.Type;
         Cycle = specie.Cycle;

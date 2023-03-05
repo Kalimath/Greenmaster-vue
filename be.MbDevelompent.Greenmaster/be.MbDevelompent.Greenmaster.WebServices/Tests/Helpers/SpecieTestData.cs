@@ -10,7 +10,7 @@ public static class SpecieTestData
     {
         Id = 1,
         Genus = "Buxus",
-        ScientificName = "Buxus Sempervirens",
+        Species = "Sempervirens",
         Name = "European box",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
@@ -19,7 +19,7 @@ public static class SpecieTestData
     {
         Id = 2,
         Genus = "Buxus",
-        ScientificName = "Buxus Sinica",
+        Species = "Sinica",
         Name = "Chinese box",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
@@ -28,28 +28,12 @@ public static class SpecieTestData
     {
         Id = 3,
         Genus = "Strelitzia",
-        ScientificName = "Strelitzia Reginae",
+        Species = "Reginae",
         Name = "Bird of paradise",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
     };
     
-    public static readonly SpecieDTO SpecieBuxusDTO = new()
-    {
-        Id = 1,
-        Genus = "Buxus",
-        ScientificName = "Buxus Sempervirens",
-        Name = "Boxtree",
-        Type = PlantType.Bush.ToString(),
-        Cycle = Lifecycle.Perennial.ToString()
-    };
-    public static readonly SpecieDTO SpecieStrelitziaDTO = new()
-    {
-        Id = 3,
-        Genus = "Strelitzia",
-        ScientificName = "Strelitzia Reginae",
-        Name = "Bird of paradise",
-        Type = PlantType.Bush.ToString(),
-        Cycle = Lifecycle.Perennial.ToString()
-    };
+    public static readonly SpecieDTO SpecieBuxusDTO = new (SpecieBuxus);
+    public static readonly SpecieDTO SpecieStrelitziaDTO = new(SpecieStrelitzia);
 }

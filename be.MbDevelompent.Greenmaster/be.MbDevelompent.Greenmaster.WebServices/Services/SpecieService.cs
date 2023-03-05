@@ -52,7 +52,7 @@ public class SpecieService : ISpecieService
         if (string.IsNullOrWhiteSpace(scientificName))
             throw new ArgumentException(nameof(scientificName));
         
-        return Task.FromResult(_specieDb.Species.Any(specie => specie.ScientificName == scientificName.TrimAndLower()));
+        return Task.FromResult(_specieDb.Species.Any(specie => specie.GetScientificName() == scientificName.TrimAndLower()));
     }
 
     public async ValueTask<Specie?> Find(string scientificName)

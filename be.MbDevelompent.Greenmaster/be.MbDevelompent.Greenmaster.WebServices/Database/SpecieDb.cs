@@ -17,12 +17,12 @@ public class SpecieDb : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Specie>().HasAlternateKey(specie => specie.ScientificName);
+        modelBuilder.Entity<Specie>().HasAlternateKey(specie => specie.GetScientificName());
     }
 
     public async Task<Specie?> GetByScientificName(string scientificName)
     {
-        return (await Species.ToListAsync()).FirstOrDefault(specie => specie.ScientificName.TrimAndLower() == scientificName.TrimAndLower());
+        return (await Species.ToListAsync()).FirstOrDefault(specie => specie.GetScientificName().TrimAndLower() == scientificName.TrimAndLower());
     }
 
     
