@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
@@ -181,10 +180,13 @@ public class SpecieTests
          //Assert
          Assert.Equal(StatusCodes.Status200OK, updatedResult.StatusCode);
          Assert.NotNull(updatedResult.Value);
-         AssertSpecie(updatedSpecie, updatedResult.Value);
          
+         AssertUnchangedSpecieProperties(SpecieBuxus, updatedResult.Value);
+         AssertModifiedSpecieProperties(updatedSpecie, updatedResult.Value);
+
          await _mockedSpecieService.Received(1).Update(Arg.Any<Specie>());
-     }  
+     }
+
      [Fact]
      public async Task UpdateSpecie_ReturnsNotFound_WhenSpecieNull()
      {
@@ -192,6 +194,7 @@ public class SpecieTests
          var updatedSpecie = new Specie()
          {
              Id = 1,
+             Genus = SpecieBuxus.Genus,
              ScientificName = "Buxus 2",
              Name = "Boxwood",
              Type = PlantType.Tree.ToString(),
@@ -216,6 +219,7 @@ public class SpecieTests
          var updatedSpecie = new Specie()
          {
              Id = 1,
+             Genus = SpecieBuxus.Genus,
              ScientificName = SpecieBuxus.ScientificName,
              Name = "Boxwood",
              Type = PlantType.Tree.ToString(),
@@ -224,6 +228,7 @@ public class SpecieTests
          var similarSpecie = new Specie()
          {
              Id = 2,
+             Genus = SpecieBuxus.Genus,
              ScientificName = SpecieBuxus.ScientificName,
              Name = "Boxwood",
              Type = PlantType.Tree.ToString(),
@@ -257,8 +262,8 @@ public class SpecieTests
 
          await _mockedSpecieService.Received(1).Remove(Arg.Any<Specie>());
      }
-     
-     public void AssertSpecie(Specie expected, Specie actual)
+
+     private void AssertSpecie(Specie expected, Specie actual)
      {
          Assert.Equal(expected.Id, actual.Id);
          Assert.Equal(expected.Genus, actual.Genus);
@@ -266,5 +271,19 @@ public class SpecieTests
          Assert.Equal(expected.Name, actual.Name);
          Assert.Equal(expected.Type, actual.Type);
          Assert.Equal(expected.Cycle, actual.Cycle);
+     }
+     
+     private static void AssertModifiedSpecieProperties(Specie expected, Specie actual)
+     {
+         Assert.Equal(expected.Name, actual.Name);
+         Assert.Equal(expected.Cycle, actual.Cycle);
+         Assert.Equal(expected.Type, actual.Type);
+     }
+
+     private void AssertUnchangedSpecieProperties(Specie initial, Specie updated)
+     {
+         Assert.Equal(initial.Id, updated.Id);
+         Assert.Equal(initial.Genus, updated.Genus);
+         Assert.Equal(initial.ScientificName, updated.ScientificName);
      }
 }

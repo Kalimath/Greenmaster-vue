@@ -58,7 +58,7 @@ public static class SpecieEndPointsV1
     {
         var specie = await specieService.Find(id);
         if (specie is null) return TypedResults.NotFound();
-        var foundSpecieWithName = (await specieService.Find(specieDTO.ScientificName)); //TODO: should not return null
+        var foundSpecieWithName = (await specieService.Find(specieDTO.ScientificName));
         if (foundSpecieWithName!=null && foundSpecieWithName.Id != id)
             return Results.Conflict($"Specie with {nameof(specieDTO.ScientificName)} already exists");
 
@@ -77,14 +77,13 @@ public static class SpecieEndPointsV1
     }
     
     /// <summary>
-    /// Updates the Specie object based on the SpecieDTO values
+    /// Updates the Specie object based on the SpecieDTO values.
     /// </summary>
     /// <param name="specieDTO"></param>
     /// <param name="specie"></param>
     /// <returns></returns>
     private static Specie UpdateSpecieModel(SpecieDTO specieDTO, Specie specie)
     {
-        specie.ScientificName = specieDTO.ScientificName;
         specie.Name = specieDTO.Name;
         specie.Cycle = specieDTO.Cycle;
         specie.Type = specieDTO.Type;
