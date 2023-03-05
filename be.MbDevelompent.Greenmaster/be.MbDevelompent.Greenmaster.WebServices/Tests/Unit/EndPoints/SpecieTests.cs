@@ -1,5 +1,6 @@
 ﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
+using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
@@ -102,7 +103,7 @@ public class SpecieTests
          //Assert
          Assert.Equal(404, notFoundResult.StatusCode);
      }
-     
+
      [Fact]
      public async Task GetSpecieWithId_ReturnsSpecieFromDatabase()
      {
@@ -117,6 +118,35 @@ public class SpecieTests
          Assert.Equal(200, okResult.StatusCode);
          var foundSpecie = Assert.IsAssignableFrom<SpecieDTO>(okResult.Value);
          Assert.Equal(1, foundSpecie.Id);
+     }
+     
+     [Fact]
+     public async Task GetSpecieByScientificName_ReturnsSpecieFromDatabase()
+     {
+         // Arrange
+         _mockedSpecieService.Find(_specieBuxus.ScientificName.TrimAndLower())
+             .Returns(_specieBuxus);
+
+         // Act
+         var okResult = (Ok<SpecieDTO>)await SpecieEndPointsV1.GetSpecieByScientificName(_specieBuxus.ScientificName, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(200, okResult.StatusCode);
+         var foundSpecie = Assert.IsAssignableFrom<SpecieDTO>(okResult.Value);
+         Assert.Equal(1, foundSpecie.Id);
+     }
+     
+     [Fact]
+     public async Task GetSpecieByScientificName_ReturnsNotFoundIfNotExists()
+     {
+         // Arrange
+         _mockedSpecieService.Find(Arg.Any<string>()).Returns((Specie?)null);
+
+         // Act
+         var notFoundResult = (NotFound)await SpecieEndPointsV1.GetSpecieByScientificName(_specieStrelitzia.ScientificName, _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(404, notFoundResult.StatusCode);
      }
      
      [Fact]
