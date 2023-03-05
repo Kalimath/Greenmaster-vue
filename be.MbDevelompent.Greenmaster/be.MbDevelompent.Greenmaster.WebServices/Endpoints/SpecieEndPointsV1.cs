@@ -12,7 +12,7 @@ public static class SpecieEndPointsV1
     {
         group.MapGet("/", GetAllSpecies).WithName("GetAllSpecies").WithOpenApi();
         group.MapGet("/{id}", GetSpecieWithId).WithName("GetSpecieWithId").WithOpenApi();
-        group.MapGet("/Details/{scientificName}", GetSpecieByScientificName).WithName("GetSpecieByScientificName").WithOpenApi();
+        group.MapGet("/details/{scientificName}", GetSpecieByScientificName).WithName("GetSpecieByScientificName").WithOpenApi();
         group.MapPost("/", AddSpecie).WithName("AddSpecie").Accepts<SpecieDTO>("application/json").WithOpenApi();
         group.MapPut("/{id}", UpdateSpecie).WithName("UpdateSpecie").WithOpenApi();
         group.MapDelete("/{id}", DeleteSpecie).WithName("DeleteSpecie").WithOpenApi();
