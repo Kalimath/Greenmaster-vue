@@ -44,7 +44,7 @@ public class CtorShould
     public void SetNameToDtoName_WhenCalled()
     {
         var createdSpecie = new SpecieDTO(SpecieBuxus);
-        Assert.Equal(SpecieBuxus.Name, createdSpecie.Name);
+        Assert.Equal(SpecieBuxus.CommonName, createdSpecie.CommonName);
     }
     
     [Fact]

@@ -11,7 +11,7 @@ public static class SpecieTestData
         Id = 1,
         Genus = "Buxus",
         Species = "Sempervirens",
-        Name = "European box",
+        CommonName = "European box",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
     };
@@ -20,7 +20,7 @@ public static class SpecieTestData
         Id = 2,
         Genus = "Buxus",
         Species = "Sinica",
-        Name = "Chinese box",
+        CommonName = "Chinese box",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
     };
@@ -29,7 +29,7 @@ public static class SpecieTestData
         Id = 3,
         Genus = "Strelitzia",
         Species = "Reginae",
-        Name = "Bird of paradise",
+        CommonName = "Bird of paradise",
         Type = PlantType.Bush.ToString(),
         Cycle = Lifecycle.Perennial.ToString()
     };

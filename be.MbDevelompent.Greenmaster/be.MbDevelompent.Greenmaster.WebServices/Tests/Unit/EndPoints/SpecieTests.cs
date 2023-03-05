@@ -207,7 +207,7 @@ public class SpecieTests
              Id = 1,
              Genus = SpecieBuxus.Genus,
              Species = SpecieBuxusSinica.Species,
-             Name = SpecieBuxus.Name,
+             CommonName = SpecieBuxus.CommonName,
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
@@ -236,7 +236,7 @@ public class SpecieTests
              Id = 1,
              Genus = SpecieBuxus.Genus,
              Species = SpecieBuxusSinica.Species,
-             Name = "Boxwood",
+             CommonName = "Boxwood",
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
@@ -261,7 +261,7 @@ public class SpecieTests
              Id = 1,
              Genus = SpecieBuxus.Genus,
              Species = SpecieBuxus.Species,
-             Name = "Boxwood",
+             CommonName = "Boxwood",
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
@@ -270,7 +270,7 @@ public class SpecieTests
              Id = 2,
              Genus = SpecieBuxus.Genus,
              Species = SpecieBuxus.Species,
-             Name = "Boxwood",
+             CommonName = "Boxwood",
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
@@ -308,14 +308,14 @@ public class SpecieTests
          Assert.Equal(expected.Id, actual.Id);
          Assert.Equal(expected.Genus, actual.Genus);
          Assert.Equal(expected.Species, actual.Species);
-         Assert.Equal(expected.Name, actual.Name);
+         Assert.Equal(expected.CommonName, actual.CommonName);
          Assert.Equal(expected.Type, actual.Type);
          Assert.Equal(expected.Cycle, actual.Cycle);
      }
      
      private static void AssertModifiedSpecieProperties(Specie expected, Specie actual)
      {
-         Assert.Equal(expected.Name, actual.Name);
+         Assert.Equal(expected.CommonName, actual.CommonName);
          Assert.Equal(expected.Cycle, actual.Cycle);
          Assert.Equal(expected.Type, actual.Type);
      }

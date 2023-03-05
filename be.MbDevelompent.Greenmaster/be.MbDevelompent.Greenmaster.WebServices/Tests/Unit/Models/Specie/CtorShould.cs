@@ -27,7 +27,7 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Species = SpecieBuxus.Species,
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -43,7 +43,7 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = string.Empty,
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -59,7 +59,7 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = "  ",
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -81,7 +81,7 @@ public class CtorShould
         {
             Genus = SpecieBuxus.Genus.ToLower(),
             Species = SpecieBuxus.Species,
-            Name = SpecieBuxus.Name,
+            CommonName = SpecieBuxus.CommonName,
             Cycle = SpecieBuxus.Cycle,
             Type = SpecieBuxus.Type
         };
@@ -98,7 +98,7 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = null!,
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -115,7 +115,7 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = string.Empty,
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -132,7 +132,7 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = "  ",
-                Name = SpecieBuxus.Name,
+                CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
             };
@@ -154,7 +154,7 @@ public class CtorShould
         {
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxus.Species.ToLower(),
-            Name = SpecieBuxus.Name,
+            CommonName = SpecieBuxus.CommonName,
             Cycle = SpecieBuxus.Cycle,
             Type = SpecieBuxus.Type
         };
@@ -173,7 +173,7 @@ public class CtorShould
     public void SetNameToDtoName_WhenCalled()
     {
         var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
-        Assert.Equal(SpecieBuxusDTO.Name, createdSpecie.Name);
+        Assert.Equal(SpecieBuxusDTO.CommonName, createdSpecie.CommonName);
     }
     
     [Fact]

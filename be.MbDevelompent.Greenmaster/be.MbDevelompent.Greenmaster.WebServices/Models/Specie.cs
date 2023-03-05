@@ -19,7 +19,7 @@ public class Specie
     
     public string ScientificName => $"{Genus} {Species}";
 
-    public string? Name { get; set; }
+    public string? CommonName { get; set; }
     [Required]
     public string Type
     {
@@ -51,7 +51,7 @@ public class Specie
             throw new ArgumentException(nameof(specieDTO.Species));
         Species = specieDTO.Species.Capitalise();
         _scientificName = $"{Genus} {Species}";
-        Name = specieDTO.Name;
+        CommonName = specieDTO.CommonName;
         _cycle = specieDTO.Cycle;
         _type = specieDTO.Type;
     }

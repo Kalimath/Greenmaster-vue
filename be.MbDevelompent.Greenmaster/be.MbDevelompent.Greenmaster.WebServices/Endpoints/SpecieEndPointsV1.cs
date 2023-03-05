@@ -93,7 +93,7 @@ public static class SpecieEndPointsV1
     /// <returns></returns>
     private static Specie UpdateSpecieModel(SpecieDTO specieDTO, Specie specie)
     {
-        specie.Name = specieDTO.Name;
+        specie.CommonName = specieDTO.CommonName;
         specie.Cycle = specieDTO.Cycle;
         specie.Type = specieDTO.Type;
         return specie;
