@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Models;
@@ -40,8 +41,8 @@ public class Specie
         Id = specieDTO.Id;
         if (string.IsNullOrEmpty(specieDTO.Genus?.Trim()))
             throw new ArgumentException(nameof(specieDTO.Genus));
-        Genus = specieDTO.Genus;
-        ScientificName = specieDTO.ScientificName;
+        Genus = specieDTO.Genus.Capitalise();
+        ScientificName = specieDTO.ScientificName.Capitalise();
         Name = specieDTO.Name;
         _cycle = specieDTO.Cycle;
         _type = specieDTO.Type;

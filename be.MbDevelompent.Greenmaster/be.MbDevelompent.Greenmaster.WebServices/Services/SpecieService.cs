@@ -1,4 +1,5 @@
 ﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
+using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,11 @@ public class SpecieService : ISpecieService
     public async Task<List<Specie>> GetAll()
     {
         return await _specieDb.Species.ToListAsync();
+    }
+
+    public async Task<List<Specie>> GetAllWithGenus(string genus)
+    {
+        return (await GetAll()).Where(specie => specie.Genus.TrimAndLower() == genus.TrimAndLower()).ToList();
     }
 
     public async Task Add(Specie specie)
@@ -46,7 +52,7 @@ public class SpecieService : ISpecieService
         if (string.IsNullOrWhiteSpace(scientificName))
             throw new ArgumentException(nameof(scientificName));
         
-        return Task.FromResult(_specieDb.Species.Any(specie => specie.ScientificName.ToLower() == scientificName.ToLower().Trim()));
+        return Task.FromResult(_specieDb.Species.Any(specie => specie.ScientificName == scientificName.TrimAndLower()));
     }
 
     public async ValueTask<Specie?> Find(string scientificName)

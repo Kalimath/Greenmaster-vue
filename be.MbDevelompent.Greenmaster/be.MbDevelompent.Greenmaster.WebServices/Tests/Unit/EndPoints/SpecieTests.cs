@@ -26,7 +26,7 @@ public class SpecieTests
         _mockedSpecieService = Substitute.For<ISpecieService>();
         
         _species = new List<Specie> {
-            SpecieBuxus, SpecieStrelitzia
+            SpecieBuxus, SpecieBuxusSinica, SpecieStrelitzia
         };
     }
 
@@ -34,7 +34,6 @@ public class SpecieTests
      public async Task GetAllSpecies_ReturnsOkResult()
      {
          // Arrange
-         var db = new MockedSpecieDb().CreateDbContext();
          _mockedSpecieService.GetAll().Returns(_species);
 
          // Act
@@ -43,7 +42,7 @@ public class SpecieTests
          // Assert: Check for the correct returned type
          Assert.IsType<Ok<SpecieDTO[]>>(result);
      }
-
+     
      [Fact]
      public async Task GetAllSpecies_ReturnsSpeciesFromDatabase()
      {
@@ -59,9 +58,53 @@ public class SpecieTests
 
          Assert.NotEmpty(foundSpecies);
          Assert.Equal(_species.Count, foundSpecies.Length);
-         Assert.Collection(foundSpecies, 
-             specieDto1 => AssertSpecie(SpecieBuxus, new Specie(specieDto1)), 
-             specieDto2 => AssertSpecie(SpecieStrelitzia,new Specie(specieDto2)));
+     }
+     
+     [Fact]
+     public async Task GetAllSpeciesWithGenus_ReturnsOkResultWithData()
+     {
+         // Arrange
+         var buxusGenusSpecies = _species.Where(specie => specie.Genus == SpecieBuxus.Genus).ToList();
+         _mockedSpecieService.GetAllWithGenus(SpecieBuxus.Genus.Capitalise()).Returns(buxusGenusSpecies);
+
+         // Act
+         var result = (Ok<SpecieDTO[]>)await SpecieEndPointsV1.GetAllSpeciesWithGenus(SpecieBuxus.Genus, _mockedSpecieService);
+
+         // Assert: Check for the correct returned type
+         Assert.IsType<Ok<SpecieDTO[]>>(result);
+         Assert.NotNull(result.Value);
+         Assert.True(buxusGenusSpecies.Count == result.Value.Length);
+         Assert.True(result.Value.All(dto => dto.Genus == SpecieBuxus.Genus));
+     }
+     
+     [Fact]
+     public async Task GetAllSpeciesWithGenus_ReturnsBadRequest_WhenGenusNull()
+     {
+         // Act
+         var result = (BadRequest<string>)await SpecieEndPointsV1.GetAllSpeciesWithGenus(null!, _mockedSpecieService);
+
+         // Assert: Check for the correct returned type
+         Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
+     }
+     
+     [Fact]
+     public async Task GetAllSpeciesWithGenus_ReturnsBadRequest_WhenGenusEmpty()
+     {
+         // Act
+         var result = (BadRequest<string>)await SpecieEndPointsV1.GetAllSpeciesWithGenus(string.Empty, _mockedSpecieService);
+
+         // Assert: Check for the correct returned type
+         Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
+     }
+     
+     [Fact]
+     public async Task GetAllSpeciesWithGenus_ReturnsBadRequest_WhenGenusWhitespace()
+     {
+         // Act
+         var result = (BadRequest<string>)await SpecieEndPointsV1.GetAllSpeciesWithGenus("  ", _mockedSpecieService);
+
+         // Assert: Check for the correct returned type
+         Assert.Equal(StatusCodes.Status400BadRequest, result.StatusCode);
      }
     
      

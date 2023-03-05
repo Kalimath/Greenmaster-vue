@@ -75,6 +75,21 @@ public class CtorShould
         var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
         Assert.Equal(SpecieBuxusDTO.Genus, createdSpecie.Genus);
     }
+    
+    [Fact]
+    public void CapitaliseSetGenus_WhenCalled()
+    {
+        var specieDTO = new SpecieDTO()
+        {
+            Genus = SpecieBuxus.Genus.ToLower(),
+            ScientificName = SpecieBuxus.ScientificName,
+            Name = SpecieBuxus.Name,
+            Cycle = SpecieBuxus.Cycle,
+            Type = SpecieBuxus.Type
+        };
+        var createdSpecie = new WebServices.Models.Specie(specieDTO);
+        Assert.Equal(SpecieBuxusDTO.Genus, createdSpecie.Genus);
+    }
 
     [Fact]
     public void SetScientificNameToDtoScientificName_WhenCalled()

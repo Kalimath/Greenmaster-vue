@@ -6,9 +6,11 @@ public interface ISpecieService
 {
     ValueTask<Specie?> Find(int id);
     Task<List<Specie>> GetAll();
+    Task<List<Specie>> GetAllWithGenus(string genus);
     Task Add(Specie specie);
     Task Update(Specie specie);
     Task Remove(Specie specie);
     Task<bool> ExistsWithScientificName(string specieBuxusScientificName);
     ValueTask<Specie?> Find(string scientificName);
+    
 }

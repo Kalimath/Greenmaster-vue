@@ -2,6 +2,8 @@
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 
@@ -10,8 +12,9 @@ public static class SpecieEndPointsV1
     public static RouteGroupBuilder MapSpeciesApiV1(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetAllSpecies).WithName("GetAllSpecies").WithOpenApi();
+        group.MapGet("/Genus/{genus}", GetAllSpeciesWithGenus).WithName("GetAllSpeciesWithGenus").WithOpenApi();
         group.MapGet("/{id}", GetSpecieWithId).WithName("GetSpecieWithId").WithOpenApi();
-        group.MapGet("/details/{scientificName}", GetSpecieByScientificName).WithName("GetSpecieByScientificName").WithOpenApi();
+        group.MapGet("/specie/{scientificName}", GetSpecieByScientificName).WithName("GetSpecieByScientificName").WithOpenApi();
         group.MapPost("/", AddSpecie).WithName("AddSpecie").Accepts<SpecieDTO>("application/json").WithOpenApi();
         group.MapPut("/{id}", UpdateSpecie).WithName("UpdateSpecie").WithOpenApi();
         group.MapDelete("/{id}", DeleteSpecie).WithName("DeleteSpecie").WithOpenApi();
@@ -22,6 +25,14 @@ public static class SpecieEndPointsV1
     public static async Task<IResult> GetAllSpecies(ISpecieService specieService)
     {
         return TypedResults.Ok((await specieService.GetAll()).Select(x => new SpecieDTO(x)).ToArray());
+    }
+    
+    public static async Task<IResult> GetAllSpeciesWithGenus(string genus, ISpecieService specieService)
+    {
+        if (string.IsNullOrEmpty(genus?.Trim()))
+            return TypedResults.BadRequest("given genus is invalid");
+        var allWithGenus = (await specieService.GetAllWithGenus(genus.Capitalise()));
+        return TypedResults.Ok(allWithGenus.Select(x => new SpecieDTO(x)).ToArray());
     }
 
     public static async Task<IResult> GetSpecieWithId(int id, ISpecieService specieService)

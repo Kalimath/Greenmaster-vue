@@ -20,6 +20,7 @@ public class DataSeeder
             var species = new List<Specie>()
             {
                 SpecieBuxus,
+                SpecieBuxusSinica,
                 SpecieStrelitzia
             };
 
