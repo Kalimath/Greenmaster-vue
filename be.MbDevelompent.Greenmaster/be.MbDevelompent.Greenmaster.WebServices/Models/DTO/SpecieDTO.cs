@@ -38,6 +38,9 @@ public class SpecieDTO
     public string MaintenanceLevel { get; set; }
     public string MaintenanceDescription { get; set; }
     
+    //media
+    public string ImgBase64 { get; set; }
+    
     
     public SpecieDTO() { }
     public SpecieDTO(Specie specie)
