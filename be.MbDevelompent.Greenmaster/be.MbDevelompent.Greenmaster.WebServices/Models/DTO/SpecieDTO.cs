@@ -10,7 +10,7 @@ public class SpecieDTO
     public int Id { get; set; }
     public string Genus { get; set; }
     public string Species { get; set; }
-    public string ScientificName { get; set; }
+    public string ScientificName => $"{Genus} {Species}";
     public string? Name { get; set; }
 
     public string Type
@@ -37,7 +37,6 @@ public class SpecieDTO
         if (string.IsNullOrEmpty(specie.Species?.Trim()))
             throw new ArgumentException(nameof(specie.Species));
         Species = specie.Species;
-        ScientificName = $"{specie.Genus} {specie.Species}";
         Name = specie.Name;
         Type = specie.Type;
         Cycle = specie.Cycle;

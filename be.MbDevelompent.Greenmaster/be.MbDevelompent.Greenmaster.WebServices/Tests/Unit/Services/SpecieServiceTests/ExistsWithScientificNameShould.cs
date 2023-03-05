@@ -12,7 +12,7 @@ public class ExistsWithScientificNameShould
     {
         // ISpecieService service = new SpecieService(new SpecieDb());
         //
-        // Assert.ThrowsAsync<ArgumentException>(() => service.ExistsWithScientificName(string.Empty));
+        // Assert.ThrowsAsync<ArgumentException>(() => service.SpecieExistsWith(string.Empty));
     }
 
     [Fact]

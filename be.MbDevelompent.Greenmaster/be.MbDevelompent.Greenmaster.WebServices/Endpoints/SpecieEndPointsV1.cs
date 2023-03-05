@@ -55,7 +55,7 @@ public static class SpecieEndPointsV1
     {
         var specieItem = new Specie(specieDTO);
 
-        if (await specieService.ExistsWithScientificName(specieItem.GetScientificName()))
+        if (await specieService.SpecieExistsWith(specieItem.Genus, specieItem.Species))
             return Results.Conflict($"Specie with Scientific-name already exists");
         
         await specieService.Add(specieItem);
@@ -86,7 +86,7 @@ public static class SpecieEndPointsV1
     }
     
     /// <summary>
-    /// Updates the Specie object based on the SpecieDTO values.
+    /// Updates the Specie object based on the SpecieDTO values which are updatable.
     /// </summary>
     /// <param name="specieDTO"></param>
     /// <param name="specie"></param>

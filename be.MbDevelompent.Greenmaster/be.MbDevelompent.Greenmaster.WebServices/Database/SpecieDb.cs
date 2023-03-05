@@ -14,15 +14,10 @@ public class SpecieDb : DbContext
     }
 
     public DbSet<Specie> Species => Set<Specie>();
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Specie>().HasAlternateKey(specie => specie.GetScientificName());
-    }
 
     public async Task<Specie?> GetByScientificName(string scientificName)
     {
-        return (await Species.ToListAsync()).FirstOrDefault(specie => specie.GetScientificName().TrimAndLower() == scientificName.TrimAndLower());
+        return (await Species.ToListAsync()).FirstOrDefault(specie => specie.ScientificName == scientificName.Trim().Capitalise());
     }
 
     

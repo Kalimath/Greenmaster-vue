@@ -17,7 +17,7 @@ public class Specie
     [Required]
     public string Species { get; set; }
     
-    public string GetScientificName() => $"{Genus} {Species}";
+    public string ScientificName => $"{Genus} {Species}";
 
     public string? Name { get; set; }
     [Required]

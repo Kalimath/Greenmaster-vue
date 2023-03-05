@@ -137,7 +137,7 @@ public class CtorShould
     public void SetScientificNameToDtoScientificName_WhenCalled()
     {
         var createdSpecie = new SpecieDTO(SpecieBuxus);
-        Assert.Equal(SpecieBuxus.GetScientificName(), createdSpecie.ScientificName);
+        Assert.Equal(SpecieBuxus.ScientificName, createdSpecie.ScientificName);
     }
 
     [Fact]

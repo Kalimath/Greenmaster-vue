@@ -26,7 +26,7 @@ public class CtorShould
         {
             var specieDTO = new SpecieDTO()
             {
-                ScientificName = SpecieBuxus.GetScientificName(),
+                Species = SpecieBuxus.Species,
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -43,7 +43,6 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = string.Empty,
-                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -60,7 +59,6 @@ public class CtorShould
             var specieDTO = new SpecieDTO()
             {
                 Genus = "  ",
-                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -83,7 +81,6 @@ public class CtorShould
         {
             Genus = SpecieBuxus.Genus.ToLower(),
             Species = SpecieBuxus.Species,
-            ScientificName = SpecieBuxus.GetScientificName(),
             Name = SpecieBuxus.Name,
             Cycle = SpecieBuxus.Cycle,
             Type = SpecieBuxus.Type
@@ -101,7 +98,6 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = null!,
-                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -119,7 +115,6 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = string.Empty,
-                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -137,7 +132,6 @@ public class CtorShould
             {
                 Genus = SpecieBuxus.Genus,
                 Species = "  ",
-                ScientificName = SpecieBuxus.GetScientificName(),
                 Name = SpecieBuxus.Name,
                 Cycle = SpecieBuxus.Cycle,
                 Type = SpecieBuxus.Type
@@ -160,7 +154,6 @@ public class CtorShould
         {
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxus.Species.ToLower(),
-            ScientificName = SpecieBuxus.GetScientificName(),
             Name = SpecieBuxus.Name,
             Cycle = SpecieBuxus.Cycle,
             Type = SpecieBuxus.Type
@@ -173,7 +166,7 @@ public class CtorShould
     public void SetScientificName_WhenCalled()
     {
         var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
-        Assert.Equal($"{SpecieBuxus.Genus} {SpecieBuxus.Species}", createdSpecie.GetScientificName());
+        Assert.Equal($"{SpecieBuxus.Genus} {SpecieBuxus.Species}", createdSpecie.ScientificName);
     }
 
     [Fact]

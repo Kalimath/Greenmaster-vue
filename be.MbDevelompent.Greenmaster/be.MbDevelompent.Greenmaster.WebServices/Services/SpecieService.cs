@@ -47,12 +47,14 @@ public class SpecieService : ISpecieService
         await _specieDb.SaveChangesAsync();
     }
 
-    public Task<bool> ExistsWithScientificName(string scientificName)
+    public Task<bool> SpecieExistsWith(string genus, string species)
     {
-        if (string.IsNullOrWhiteSpace(scientificName))
-            throw new ArgumentException(nameof(scientificName));
+        if (string.IsNullOrWhiteSpace(genus?.Trim()))
+            throw new ArgumentException(nameof(genus));
+        if (string.IsNullOrWhiteSpace(species?.Trim()))
+            throw new ArgumentException(nameof(species));
         
-        return Task.FromResult(_specieDb.Species.Any(specie => specie.GetScientificName() == scientificName.TrimAndLower()));
+        return Task.FromResult(_specieDb.Species.Any(specie => specie.Genus == genus.Capitalise()&& specie.Species == species.Capitalise()));
     }
 
     public async ValueTask<Specie?> Find(string scientificName)
