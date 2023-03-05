@@ -17,8 +17,6 @@ public class SpecieTests
 {
     private readonly ISpecieService _mockedSpecieService;
     private readonly List<Specie> _species;
-    private readonly Specie _specieBuxus;
-    private readonly Specie _specieStrelitzia;
 
     public SpecieTests()
     {
