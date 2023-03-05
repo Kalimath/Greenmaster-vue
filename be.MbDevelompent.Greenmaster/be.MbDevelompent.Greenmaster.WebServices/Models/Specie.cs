@@ -24,13 +24,13 @@ public class Specie
     public string Type
     {
         get => _type;
-        set => _type = Enum.IsDefined(typeof(PlantType), value) ? value : throw new InvalidEnumArgumentException();
+        set => _type = Enum.IsDefined(typeof(PlantType), value.Capitalise()) ? value.Capitalise() : throw new InvalidEnumArgumentException();
     }
     [Required]
     public string Cycle
     {
         get => _cycle;
-        set => _cycle = Enum.IsDefined(typeof(Lifecycle), value) ? value : throw new InvalidEnumArgumentException();
+        set => _cycle = Enum.IsDefined(typeof(Lifecycle), value.Capitalise()) ? value.Capitalise() : throw new InvalidEnumArgumentException();
     }
 
 
