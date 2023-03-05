@@ -33,7 +33,7 @@ public class SpecieTests
         };
         _specieStrelitzia = new Specie
         {
-            Id = 1,
+            Id = 2,
             ScientificName = "Strelitzia Reginae",
             Name = "Bird of paradise",
             Type = PlantType.Bush.ToString(),
