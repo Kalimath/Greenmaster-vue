@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
-using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
 using be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Xunit;
+
 // ReSharper disable MethodTooLong
 
-namespace be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
+namespace be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPoints;
 
 public class SpecieTests
 {
@@ -199,6 +198,39 @@ public class SpecieTests
          Assert.Equal(StatusCodes.Status404NotFound, updatedResult.StatusCode);
 
          await _mockedSpecieService.Received(1).Find(_specieBuxus.Id);
+         await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
+     }  
+     
+     [Fact]
+     public async Task UpdateSpecie_ReturnsConflict_WhenScientificNameExistsElsewhere()
+     {
+         //Arrange
+         var updatedSpecie = new Specie()
+         {
+             Id = 1,
+             ScientificName = _specieBuxus.ScientificName,
+             Name = "Boxwood",
+             Type = PlantType.Tree.ToString(),
+             Cycle = Lifecycle.Biennial.ToString()
+         };
+         var similarSpecie = new Specie()
+         {
+             Id = 2,
+             ScientificName = _specieBuxus.ScientificName,
+             Name = "Boxwood",
+             Type = PlantType.Tree.ToString(),
+             Cycle = Lifecycle.Biennial.ToString()
+         };
+         _mockedSpecieService.Find(updatedSpecie.Id).Returns(_specieBuxus);
+         _mockedSpecieService.Find(updatedSpecie.ScientificName).Returns(similarSpecie);
+
+         //Act
+         var updatedResult = (Conflict<string>)await SpecieEndPointsV1.UpdateSpecie(_specieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+
+         //Assert
+         Assert.Equal(StatusCodes.Status409Conflict, updatedResult.StatusCode);
+
+         await _mockedSpecieService.Received(1).Find(updatedSpecie.ScientificName);
          await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
      }
      

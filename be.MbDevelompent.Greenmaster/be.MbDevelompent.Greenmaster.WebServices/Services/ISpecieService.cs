@@ -10,4 +10,5 @@ public interface ISpecieService
     Task Update(Specie specie);
     Task Remove(Specie specie);
     Task<bool> ExistsWithScientificName(string specieBuxusScientificName);
+    ValueTask<Specie?> Find(string scientificName);
 }

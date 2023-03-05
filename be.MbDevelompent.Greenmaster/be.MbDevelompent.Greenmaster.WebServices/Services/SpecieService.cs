@@ -10,7 +10,7 @@ public class SpecieService : ISpecieService
 
     public SpecieService(SpecieDb specieDb)
     {
-        _specieDb = specieDb;
+        _specieDb = specieDb ?? throw new ArgumentNullException(nameof(specieDb));
     }
     
     public async ValueTask<Specie?> Find(int id)
@@ -43,7 +43,14 @@ public class SpecieService : ISpecieService
 
     public Task<bool> ExistsWithScientificName(string scientificName)
     {
-        //TODO: validate scientificName
+        if (string.IsNullOrWhiteSpace(scientificName))
+            throw new ArgumentException(nameof(scientificName));
+        
         return Task.FromResult(_specieDb.Species.Any(specie => specie.ScientificName.ToLower() == scientificName.ToLower().Trim()));
+    }
+
+    public async ValueTask<Specie?> Find(string scientificName)
+    {
+        return await _specieDb.GetByScientificName(scientificName);
     }
 }

@@ -1,9 +1,6 @@
-﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
-using be.MbDevelompent.Greenmaster.WebServices.Models;
+﻿using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
-using be.MbDevelompent.Greenmaster.WebServices.Tests.Unit.EndPointTests;
-using Microsoft.EntityFrameworkCore;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 
@@ -49,8 +46,21 @@ public static class SpecieEndPointsV1
     {
         var specie = await specieService.Find(id);
         if (specie is null) return TypedResults.NotFound();
-        await specieService.Update(new Specie(specieDTO));
+        var foundSpecieWithName = (await specieService.Find(specieDTO.ScientificName)); //TODO: should not return null
+        if (foundSpecieWithName!=null && foundSpecieWithName.Id != id)
+            return Results.Conflict($"Specie with {nameof(specieDTO.ScientificName)} already exists");
+
+        await specieService.Update(UpdateSpecieModel(specieDTO, specie));
         return TypedResults.Ok();
+    }
+
+    private static Specie UpdateSpecieModel(SpecieDTO specieDTO, Specie specie)
+    {
+        specie.ScientificName = specieDTO.ScientificName;
+        specie.Name = specieDTO.Name;
+        specie.Cycle = specieDTO.Cycle;
+        specie.Type = specieDTO.Type;
+        return specie;
     }
 
     public static async Task<IResult> DeleteSpecie(int id, ISpecieService specieService)
