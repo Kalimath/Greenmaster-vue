@@ -18,8 +18,6 @@ builder.Services.AddTransient<DataSeeder>();
 services.AddDbContext<SpecieDb>(opt => opt.UseInMemoryDatabase("SpecieList"));
 services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-
 // app
 var app = builder.Build();    
 

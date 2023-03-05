@@ -62,8 +62,9 @@ public static class SpecieEndPointsV1
         if (foundSpecieWithName!=null && foundSpecieWithName.Id != id)
             return Results.Conflict($"Specie with {nameof(specieDTO.ScientificName)} already exists");
 
-        await specieService.Update(UpdateSpecieModel(specieDTO, specie));
-        return TypedResults.Ok();
+        var updatedSpecieModel = UpdateSpecieModel(specieDTO, specie);
+        await specieService.Update(updatedSpecieModel);
+        return TypedResults.Ok(updatedSpecieModel);
     }
     
     public static async Task<IResult> DeleteSpecie(int id, ISpecieService specieService)

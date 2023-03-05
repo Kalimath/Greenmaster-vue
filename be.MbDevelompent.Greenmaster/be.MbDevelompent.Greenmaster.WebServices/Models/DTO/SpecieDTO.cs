@@ -8,6 +8,7 @@ public class SpecieDTO
     private string _cycle;
     private string _type;
     public int Id { get; set; }
+    public string Genus { get; set; }
     public string ScientificName { get; set; }
     public string? Name { get; set; }
 
@@ -23,13 +24,19 @@ public class SpecieDTO
         set => _cycle = Enum.IsDefined(typeof(Lifecycle), value) ? value : throw new InvalidEnumArgumentException();
     }
 
+
     public SpecieDTO() { }
-    public SpecieDTO(Specie specieItem)
+    public SpecieDTO(Specie specie)
     {
-        Id = specieItem.Id;
-        ScientificName = specieItem.ScientificName;
-        Name = specieItem.Name;
-        Type = specieItem.Type;
-        Cycle = specieItem.Cycle;
+        if (specie == null)
+            throw new ArgumentNullException(nameof(specie));
+        Id = specie.Id;
+        if (string.IsNullOrEmpty(specie.Genus?.Trim()))
+            throw new ArgumentException(nameof(specie.Genus));
+        Genus = specie.Genus;
+        ScientificName = specie.ScientificName;
+        Name = specie.Name;
+        Type = specie.Type;
+        Cycle = specie.Cycle;
     }
 }

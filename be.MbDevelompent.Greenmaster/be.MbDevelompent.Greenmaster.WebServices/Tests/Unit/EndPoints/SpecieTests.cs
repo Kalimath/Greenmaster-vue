@@ -1,4 +1,5 @@
-﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+﻿using System.Diagnostics;
+using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 using be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
@@ -8,6 +9,7 @@ using be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 using Xunit;
+using static be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers.SpecieTestData;
 
 // ReSharper disable MethodTooLong
 
@@ -23,25 +25,9 @@ public class SpecieTests
     public SpecieTests()
     {
         _mockedSpecieService = Substitute.For<ISpecieService>();
-        _specieBuxus = new Specie
-        {
-            Id = 1,
-            ScientificName = "Buxus Sempervirens",
-            Name = "Boxtree",
-            Type = PlantType.Bush.ToString(),
-            Cycle = Lifecycle.Perennial.ToString()
-        };
-        _specieStrelitzia = new Specie
-        {
-            Id = 2,
-            ScientificName = "Strelitzia Reginae",
-            Name = "Bird of paradise",
-            Type = PlantType.Bush.ToString(),
-            Cycle = Lifecycle.Perennial.ToString()
-        };
         
         _species = new List<Specie> {
-            _specieBuxus,_specieStrelitzia
+            SpecieBuxus, SpecieStrelitzia
         };
     }
 
@@ -74,22 +60,11 @@ public class SpecieTests
 
          Assert.NotEmpty(foundSpecies);
          Assert.Equal(_species.Count, foundSpecies.Length);
-         Assert.Collection(foundSpecies, specie1 =>
-         {
-             Assert.Equal(_specieBuxus.Id, specie1.Id);
-             Assert.Equal(_specieBuxus.ScientificName, specie1.ScientificName);
-             Assert.Equal(_specieBuxus.Name, specie1.Name);
-             Assert.Equal(_specieBuxus.Type, specie1.Type);
-             Assert.Equal(_specieBuxus.Cycle, specie1.Cycle);
-         }, specie2 =>
-         {
-             Assert.Equal(_specieStrelitzia.Id, specie2.Id);
-             Assert.Equal(_specieStrelitzia.ScientificName, specie2.ScientificName);
-             Assert.Equal(_specieStrelitzia.Name, specie2.Name);
-             Assert.Equal(_specieStrelitzia.Type, specie2.Type);
-             Assert.Equal(_specieStrelitzia.Cycle, specie2.Cycle);
-         });
+         Assert.Collection(foundSpecies, 
+             specieDto1 => AssertSpecie(SpecieBuxus, new Specie(specieDto1)), 
+             specieDto2 => AssertSpecie(SpecieStrelitzia,new Specie(specieDto2)));
      }
+    
      
      [Fact]
      public async Task GetSpecieWithId_ReturnsNotFoundIfNotExists()
@@ -109,7 +84,7 @@ public class SpecieTests
      {
          // Arrange
          _mockedSpecieService.Find(1)
-             .Returns(_specieBuxus);
+             .Returns(SpecieBuxus);
 
          // Act
          var okResult = (Ok<SpecieDTO>)await SpecieEndPointsV1.GetSpecieWithId(1, _mockedSpecieService);
@@ -124,11 +99,11 @@ public class SpecieTests
      public async Task GetSpecieByScientificName_ReturnsSpecieFromDatabase()
      {
          // Arrange
-         _mockedSpecieService.Find(_specieBuxus.ScientificName.TrimAndLower())
-             .Returns(_specieBuxus);
+         _mockedSpecieService.Find(SpecieBuxus.ScientificName.TrimAndLower())
+             .Returns(SpecieBuxus);
 
          // Act
-         var okResult = (Ok<SpecieDTO>)await SpecieEndPointsV1.GetSpecieByScientificName(_specieBuxus.ScientificName, _mockedSpecieService);
+         var okResult = (Ok<SpecieDTO>)await SpecieEndPointsV1.GetSpecieByScientificName(SpecieBuxus.ScientificName, _mockedSpecieService);
 
          //Assert
          Assert.Equal(200, okResult.StatusCode);
@@ -143,7 +118,7 @@ public class SpecieTests
          _mockedSpecieService.Find(Arg.Any<string>()).Returns((Specie?)null);
 
          // Act
-         var notFoundResult = (NotFound)await SpecieEndPointsV1.GetSpecieByScientificName(_specieStrelitzia.ScientificName, _mockedSpecieService);
+         var notFoundResult = (NotFound)await SpecieEndPointsV1.GetSpecieByScientificName(SpecieStrelitzia.ScientificName, _mockedSpecieService);
 
          //Assert
          Assert.Equal(404, notFoundResult.StatusCode);
@@ -153,8 +128,8 @@ public class SpecieTests
      public async Task AddSpecie_CreatesSpecieInDatabase()
      {
          //Arrange
-         var newSpecie = new SpecieDTO(_specieBuxus);
-         _mockedSpecieService.Add(_specieBuxus).Returns(Task.CompletedTask);
+         var newSpecie = SpecieBuxusDTO;
+         _mockedSpecieService.Add(SpecieBuxus).Returns(Task.CompletedTask);
 
          //Act
          var createdResult = (Created<SpecieDTO>)await SpecieEndPointsV1.AddSpecie(newSpecie, _mockedSpecieService);
@@ -171,8 +146,8 @@ public class SpecieTests
      public async Task AddSpecie_DoesNotAdd_WhenSpecieInDatabase()
      {
          //Arrange
-         var newSpecie = new SpecieDTO(_specieBuxus);
-         _mockedSpecieService.ExistsWithScientificName(_specieBuxus.ScientificName).Returns(true);
+         var newSpecie = SpecieBuxusDTO;
+         _mockedSpecieService.ExistsWithScientificName(SpecieBuxus.ScientificName).Returns(true);
 
          //Act
          var result = (Conflict<string>) await SpecieEndPointsV1.AddSpecie(newSpecie, _mockedSpecieService);
@@ -186,25 +161,28 @@ public class SpecieTests
      public async Task UpdateSpecie_UpdatesSpecieInDatabase()
      {
          //Arrange
-         var existingSpecie = _specieBuxus;
+         var existingSpecie = SpecieBuxus;
 
          var updatedSpecie = new Specie()
          {
              Id = 1,
+             Genus = SpecieBuxus.Genus,
              ScientificName = "Buxus 2",
-             Name = "Boxwood",
+             Name = SpecieBuxus.Name,
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
-         _mockedSpecieService.Find(_specieBuxus.Id).Returns(_specieBuxus);
+         _mockedSpecieService.Find(SpecieBuxus.Id).Returns(SpecieBuxus);
          _mockedSpecieService.Update(updatedSpecie).Returns(Task.CompletedTask);
 
          //Act
-         var updatedResult = (Ok)await SpecieEndPointsV1.UpdateSpecie(existingSpecie.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+         var updatedResult = (Ok<Specie>)await SpecieEndPointsV1.UpdateSpecie(existingSpecie.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
 
          //Assert
          Assert.Equal(StatusCodes.Status200OK, updatedResult.StatusCode);
-
+         Assert.NotNull(updatedResult.Value);
+         AssertSpecie(updatedSpecie, updatedResult.Value);
+         
          await _mockedSpecieService.Received(1).Update(Arg.Any<Specie>());
      }  
      [Fact]
@@ -219,15 +197,15 @@ public class SpecieTests
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
-         _mockedSpecieService.Find(_specieBuxus.Id).Returns((Specie?)null);
+         _mockedSpecieService.Find(SpecieBuxus.Id).Returns((Specie?)null);
 
          //Act
-         var updatedResult = (NotFound)await SpecieEndPointsV1.UpdateSpecie(_specieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+         var updatedResult = (NotFound)await SpecieEndPointsV1.UpdateSpecie(SpecieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
 
          //Assert
          Assert.Equal(StatusCodes.Status404NotFound, updatedResult.StatusCode);
 
-         await _mockedSpecieService.Received(1).Find(_specieBuxus.Id);
+         await _mockedSpecieService.Received(1).Find(SpecieBuxus.Id);
          await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
      }  
      
@@ -238,7 +216,7 @@ public class SpecieTests
          var updatedSpecie = new Specie()
          {
              Id = 1,
-             ScientificName = _specieBuxus.ScientificName,
+             ScientificName = SpecieBuxus.ScientificName,
              Name = "Boxwood",
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
@@ -246,20 +224,20 @@ public class SpecieTests
          var similarSpecie = new Specie()
          {
              Id = 2,
-             ScientificName = _specieBuxus.ScientificName,
+             ScientificName = SpecieBuxus.ScientificName,
              Name = "Boxwood",
              Type = PlantType.Tree.ToString(),
              Cycle = Lifecycle.Biennial.ToString()
          };
-         _mockedSpecieService.Find(updatedSpecie.Id).Returns(_specieBuxus);
+         _mockedSpecieService.Find(updatedSpecie.Id).Returns(SpecieBuxus);
          _mockedSpecieService.Find(updatedSpecie.ScientificName).Returns(similarSpecie);
 
          //Act
-         var updatedResult = (Conflict<string>)await SpecieEndPointsV1.UpdateSpecie(_specieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
+         var updatedResult = (Conflict<string>)await SpecieEndPointsV1.UpdateSpecie(SpecieBuxus.Id, new SpecieDTO(updatedSpecie), _mockedSpecieService);
 
          //Assert
          Assert.Equal(StatusCodes.Status409Conflict, updatedResult.StatusCode);
-
+        
          await _mockedSpecieService.Received(1).Find(updatedSpecie.ScientificName);
          await _mockedSpecieService.Received(0).Update(Arg.Any<Specie>());
      }
@@ -268,15 +246,25 @@ public class SpecieTests
      public async Task DeleteTodoDeletesTodoInDatabase()
      {
          //Arrange
-         _mockedSpecieService.Find(_specieBuxus.Id).Returns(_specieBuxus);
-         _mockedSpecieService.Remove(_specieBuxus).Returns(Task.CompletedTask);
+         _mockedSpecieService.Find(SpecieBuxus.Id).Returns(SpecieBuxus);
+         _mockedSpecieService.Remove(SpecieBuxus).Returns(Task.CompletedTask);
 
          //Act
-         var noContentResult = (NoContent)await SpecieEndPointsV1.DeleteSpecie(_specieBuxus.Id, _mockedSpecieService);
+         var noContentResult = (NoContent)await SpecieEndPointsV1.DeleteSpecie(SpecieBuxus.Id, _mockedSpecieService);
 
          //Assert
          Assert.Equal(204, noContentResult.StatusCode);
 
          await _mockedSpecieService.Received(1).Remove(Arg.Any<Specie>());
+     }
+     
+     public void AssertSpecie(Specie expected, Specie actual)
+     {
+         Assert.Equal(expected.Id, actual.Id);
+         Assert.Equal(expected.Genus, actual.Genus);
+         Assert.Equal(expected.ScientificName, actual.ScientificName);
+         Assert.Equal(expected.Name, actual.Name);
+         Assert.Equal(expected.Type, actual.Type);
+         Assert.Equal(expected.Cycle, actual.Cycle);
      }
 }

@@ -1,6 +1,7 @@
 ﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
 using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
+using static be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers.SpecieTestData;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Helpers;
 
@@ -19,22 +20,8 @@ public class DataSeeder
         {
             var species = new List<Specie>()
             {
-                new()
-                {
-                    Id = 1,
-                    ScientificName = "Buxus Sempervirens",
-                    Name = "Boxtree",
-                    Type = PlantType.Bush.ToString(),
-                    Cycle = Lifecycle.Perennial.ToString()
-                },
-                new()
-                {
-                    Id = 2,
-                    ScientificName = "Strelitzia Reginae",
-                    Name = "Bird of paradise",
-                    Type = PlantType.Bush.ToString(),
-                    Cycle = Lifecycle.Perennial.ToString()
-                }
+                SpecieBuxus,
+                SpecieStrelitzia
             };
 
             _dbContext.Species.AddRange(species);
