@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
     SeedData(app);
 }
 app.UseHttpsRedirection();
-app.MapGroup("/species").MapSpeciesApiV1().WithTags("Specie Endpoints");
+app.MapGroup("/arboretum").MapSpeciesApiV1().WithTags("Specie Endpoints");
 app.Run();
 
 

@@ -2,8 +2,6 @@
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 
