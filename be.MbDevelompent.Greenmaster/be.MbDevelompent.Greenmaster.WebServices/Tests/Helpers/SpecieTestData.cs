@@ -35,7 +35,7 @@ public static class SpecieTestData
     };
     public static readonly Specie SpecieBirch = new()
     {
-        Id = 3,
+        Id = 4,
         Genus = "Betula",
         Species = "Pendula",
         CommonName = "Silver birch",

@@ -9,7 +9,6 @@ namespace be.MbDevelompent.Greenmaster.WebServices.Models;
 public class Specie
 {
     private string _cycle;
-    private readonly string _scientificName;
     public int Id { get; set; }
     [Required]
     public string Genus { get; set; }
@@ -46,7 +45,6 @@ public class Specie
         if (string.IsNullOrEmpty(specieDTO.Species?.Trim()))
             throw new ArgumentException(nameof(specieDTO.Species));
         Species = specieDTO.Species.Capitalise();
-        _scientificName = $"{Genus} {Species}";
         CommonName = specieDTO.CommonName;
         _cycle = specieDTO.Cycle;
         Type = (PlantType)Enum.Parse(typeof(PlantType), specieDTO.Type, true);
