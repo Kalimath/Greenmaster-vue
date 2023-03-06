@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "be.MbDevelompent.Greenmaster.Statics", "be.MbDevelompent.Greenmaster.Statics\be.MbDevelompent.Greenmaster.Statics.csproj", "{170ACCA7-0FEE-4666-B21F-98DA74FA8B6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "be.MbDevelompent.Greenmaster.JsonHandler", "be.MbDevelompent.Greenmaster.JsonHandler\be.MbDevelompent.Greenmaster.JsonHandler.csproj", "{A1B94FA8-4A75-4333-A76A-03789BE6106D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "be.MbDevelompent.Greenmaster.Arboretum", "be.MbDevelompent.Greenmaster.Arboretum\be.MbDevelompent.Greenmaster.Arboretum.csproj", "{8BEF2D59-5FD3-4EB2-9A9A-673FD44D153D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "be.MbDevelompent.Greenmaster.Repositories", "be.MbDevelompent.Greenmaster.Repositories\be.MbDevelompent.Greenmaster.Repositories.csproj", "{DEDBE241-42F0-48B9-B17E-10B16CBBEE28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "be.MbDevelompent.Greenmaster.WebServices", "be.MbDevelompent.Greenmaster.WebServices\be.MbDevelompent.Greenmaster.WebServices.csproj", "{60E77775-8E37-4135-AA3D-74C9084BD426}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{170ACCA7-0FEE-4666-B21F-98DA74FA8B6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170ACCA7-0FEE-4666-B21F-98DA74FA8B6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170ACCA7-0FEE-4666-B21F-98DA74FA8B6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170ACCA7-0FEE-4666-B21F-98DA74FA8B6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B94FA8-4A75-4333-A76A-03789BE6106D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B94FA8-4A75-4333-A76A-03789BE6106D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B94FA8-4A75-4333-A76A-03789BE6106D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B94FA8-4A75-4333-A76A-03789BE6106D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BEF2D59-5FD3-4EB2-9A9A-673FD44D153D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BEF2D59-5FD3-4EB2-9A9A-673FD44D153D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BEF2D59-5FD3-4EB2-9A9A-673FD44D153D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BEF2D59-5FD3-4EB2-9A9A-673FD44D153D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDBE241-42F0-48B9-B17E-10B16CBBEE28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDBE241-42F0-48B9-B17E-10B16CBBEE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDBE241-42F0-48B9-B17E-10B16CBBEE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDBE241-42F0-48B9-B17E-10B16CBBEE28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60E77775-8E37-4135-AA3D-74C9084BD426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60E77775-8E37-4135-AA3D-74C9084BD426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60E77775-8E37-4135-AA3D-74C9084BD426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60E77775-8E37-4135-AA3D-74C9084BD426}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
