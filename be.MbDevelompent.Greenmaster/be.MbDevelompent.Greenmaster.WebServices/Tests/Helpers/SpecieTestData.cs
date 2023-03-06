@@ -12,7 +12,7 @@ public static class SpecieTestData
         Genus = "Buxus",
         Species = "Sempervirens",
         CommonName = "European box",
-        Type = PlantType.Bush.ToString(),
+        Type = PlantType.Bush,
         Cycle = Lifecycle.Perennial.ToString()
     };
     public static readonly Specie SpecieBuxusSinica = new()
@@ -21,7 +21,7 @@ public static class SpecieTestData
         Genus = "Buxus",
         Species = "Sinica",
         CommonName = "Chinese box",
-        Type = PlantType.Bush.ToString(),
+        Type = PlantType.Bush,
         Cycle = Lifecycle.Perennial.ToString()
     };
     public static readonly Specie SpecieStrelitzia = new()
@@ -30,7 +30,16 @@ public static class SpecieTestData
         Genus = "Strelitzia",
         Species = "Reginae",
         CommonName = "Bird of paradise",
-        Type = PlantType.Bush.ToString(),
+        Type = PlantType.Bush,
+        Cycle = Lifecycle.Perennial.ToString()
+    };
+    public static readonly Specie SpecieBirch = new()
+    {
+        Id = 3,
+        Genus = "Betula",
+        Species = "Pendula",
+        CommonName = "Silver birch",
+        Type = PlantType.Tree,
         Cycle = Lifecycle.Perennial.ToString()
     };
     

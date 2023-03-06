@@ -51,7 +51,7 @@ public class CtorShould
     public void SetTypeToDtoType_WhenCalled()
     {
         var createdSpecie = new SpecieDTO(SpecieBuxus);
-        Assert.Equal(SpecieBuxus.Type, createdSpecie.Type);
+        Assert.Equal(SpecieBuxus.Type.ToString(), createdSpecie.Type);
     }
     
     [Fact]

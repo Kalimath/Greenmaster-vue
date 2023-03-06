@@ -9,7 +9,6 @@ namespace be.MbDevelompent.Greenmaster.WebServices.Models;
 public class Specie
 {
     private string _cycle;
-    private string _type;
     private readonly string _scientificName;
     public int Id { get; set; }
     [Required]
@@ -21,11 +20,8 @@ public class Specie
 
     public string? CommonName { get; set; }
     [Required]
-    public string Type
-    {
-        get => _type;
-        set => _type = Enum.IsDefined(typeof(PlantType), value.Capitalise()) ? value.Capitalise() : throw new InvalidEnumArgumentException();
-    }
+    public PlantType Type { get; set; }
+
     [Required]
     public string Cycle
     {
@@ -53,6 +49,6 @@ public class Specie
         _scientificName = $"{Genus} {Species}";
         CommonName = specieDTO.CommonName;
         _cycle = specieDTO.Cycle;
-        _type = specieDTO.Type;
+        Type = (PlantType)Enum.Parse(typeof(PlantType), specieDTO.Type, true);
     }
 }

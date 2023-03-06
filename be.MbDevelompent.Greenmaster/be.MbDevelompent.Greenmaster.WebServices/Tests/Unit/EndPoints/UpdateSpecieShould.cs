@@ -23,7 +23,7 @@ public class UpdateSpecieShould : SpecieTestBase
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxusSinica.Species,
             CommonName = SpecieBuxus.CommonName,
-            Type = PlantType.Tree.ToString(),
+            Type = PlantType.Tree,
             Cycle = Lifecycle.Biennial.ToString()
         };
         MockedSpecieService.Find(SpecieBuxus.Id).Returns(SpecieBuxus);
@@ -52,7 +52,7 @@ public class UpdateSpecieShould : SpecieTestBase
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxusSinica.Species,
             CommonName = "Boxwood",
-            Type = PlantType.Tree.ToString(),
+            Type = PlantType.Tree,
             Cycle = Lifecycle.Biennial.ToString()
         };
         MockedSpecieService.Find(SpecieBuxus.Id).Returns((Specie?)null);
@@ -77,7 +77,7 @@ public class UpdateSpecieShould : SpecieTestBase
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxus.Species,
             CommonName = "Boxwood",
-            Type = PlantType.Tree.ToString(),
+            Type = PlantType.Tree,
             Cycle = Lifecycle.Biennial.ToString()
         };
         var similarSpecie = new Specie()
@@ -86,7 +86,7 @@ public class UpdateSpecieShould : SpecieTestBase
             Genus = SpecieBuxus.Genus,
             Species = SpecieBuxus.Species,
             CommonName = "Boxwood",
-            Type = PlantType.Tree.ToString(),
+            Type = PlantType.Tree,
             Cycle = Lifecycle.Biennial.ToString()
         };
         MockedSpecieService.Find(updatedSpecie.Id).Returns(SpecieBuxus);

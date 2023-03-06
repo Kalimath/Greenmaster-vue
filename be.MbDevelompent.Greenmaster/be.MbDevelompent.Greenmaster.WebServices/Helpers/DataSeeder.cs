@@ -21,7 +21,8 @@ public class DataSeeder
             {
                 SpecieBuxus,
                 SpecieBuxusSinica,
-                SpecieStrelitzia
+                SpecieStrelitzia,
+                SpecieBirch
             };
 
             _dbContext.Species.AddRange(species);

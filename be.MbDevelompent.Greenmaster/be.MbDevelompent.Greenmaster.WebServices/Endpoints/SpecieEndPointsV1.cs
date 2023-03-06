@@ -1,7 +1,9 @@
-﻿using be.MbDevelompent.Greenmaster.WebServices.Helpers;
+﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using be.MbDevelompent.Greenmaster.WebServices.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace be.MbDevelompent.Greenmaster.WebServices.Endpoints;
 
@@ -10,7 +12,8 @@ public static class SpecieEndPointsV1
     public static RouteGroupBuilder MapSpeciesApiV1(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetAllSpecies).WithName("GetAllSpecies").WithOpenApi();
-        group.MapGet("/Genus/{genus}", GetAllSpeciesWithGenus).WithName("GetAllSpeciesWithGenus").WithOpenApi();
+        group.MapGet("/genus/{genus}", GetAllSpeciesWithGenus).WithName("GetAllSpeciesWithGenus").WithOpenApi();
+        group.MapGet("/planttype/{plantType}", GetAllSpeciesWithType).WithName("GetAllSpeciesWithPlantType").WithOpenApi();
         group.MapGet("/{id}", GetSpecieWithId).WithName("GetSpecieWithId").WithOpenApi();
         group.MapGet("/specie/{scientificName}", GetSpecieByScientificName).WithName("GetSpecieByScientificName").WithOpenApi();
         group.MapPost("/", AddSpecie).WithName("AddSpecie").Accepts<SpecieDTO>("application/json").WithOpenApi();
@@ -31,6 +34,16 @@ public static class SpecieEndPointsV1
             return TypedResults.BadRequest("given genus is invalid");
         var allWithGenus = (await specieService.GetAllWithGenus(genus.Capitalise()));
         return TypedResults.Ok(allWithGenus.Select(x => new SpecieDTO(x)).ToArray());
+    }
+    
+    public static async Task<IResult> GetAllSpeciesWithType(string plantType, ISpecieService specieService)
+    {
+        if (string.IsNullOrEmpty(plantType?.Trim())|| !Enum.IsDefined(typeof(PlantType), plantType.Capitalise()))
+            return TypedResults.BadRequest("given plantType is invalid");
+        
+        var plantTypeEnum = (PlantType)Enum.Parse(typeof(PlantType), plantType, true);
+        var allWithType = (await specieService.GetAllWithType(plantTypeEnum));
+        return TypedResults.Ok(allWithType.Select(x => new SpecieDTO(x)).ToArray());
     }
 
     public static async Task<IResult> GetSpecieWithId(int id, ISpecieService specieService)
@@ -95,7 +108,7 @@ public static class SpecieEndPointsV1
     {
         specie.CommonName = specieDTO.CommonName;
         specie.Cycle = specieDTO.Cycle;
-        specie.Type = specieDTO.Type;
+        specie.Type = (PlantType)Enum.Parse(typeof(PlantType),specieDTO.Type, true);
         return specie;
     }
 

@@ -1,4 +1,5 @@
-﻿using be.MbDevelompent.Greenmaster.WebServices.Database;
+﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+using be.MbDevelompent.Greenmaster.WebServices.Database;
 using be.MbDevelompent.Greenmaster.WebServices.Helpers;
 using be.MbDevelompent.Greenmaster.WebServices.Models;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,11 @@ public class SpecieService : ISpecieService
     public async Task<List<Specie>> GetAllWithGenus(string genus)
     {
         return (await GetAll()).Where(specie => specie.Genus.TrimAndLower() == genus.TrimAndLower()).ToList();
+    }
+
+    public async Task<List<Specie>> GetAllWithType(PlantType plantType)
+    {
+        return (await GetAll()).Where(specie => specie.Type == plantType).ToList();
     }
 
     public async Task Add(Specie specie)

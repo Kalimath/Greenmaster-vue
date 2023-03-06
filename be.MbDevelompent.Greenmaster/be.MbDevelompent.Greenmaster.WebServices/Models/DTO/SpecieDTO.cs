@@ -51,7 +51,7 @@ public class SpecieDTO
         Genus = specie.Genus;
         Species = specie.Species;
         CommonName = specie.CommonName;
-        Type = specie.Type;
+        Type = specie.Type.ToString();
         Cycle = specie.Cycle;
     }
 }

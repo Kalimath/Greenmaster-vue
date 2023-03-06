@@ -1,4 +1,5 @@
-﻿using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
+﻿using be.MbDevelompent.Greenmaster.Statics.Object.Organic;
+using be.MbDevelompent.Greenmaster.WebServices.Models.DTO;
 using Xunit;
 using static be.MbDevelompent.Greenmaster.WebServices.Tests.Helpers.SpecieTestData;
 
@@ -29,7 +30,7 @@ public class CtorShould
                 Species = SpecieBuxus.Species,
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -45,7 +46,7 @@ public class CtorShould
                 Genus = string.Empty,
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -61,7 +62,7 @@ public class CtorShould
                 Genus = "  ",
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -83,7 +84,7 @@ public class CtorShould
             Species = SpecieBuxus.Species,
             CommonName = SpecieBuxus.CommonName,
             Cycle = SpecieBuxus.Cycle,
-            Type = SpecieBuxus.Type
+            Type = SpecieBuxus.Type.ToString()
         };
         var createdSpecie = new WebServices.Models.Specie(specieDTO);
         Assert.Equal(SpecieBuxusDTO.Genus, createdSpecie.Genus);
@@ -100,7 +101,7 @@ public class CtorShould
                 Species = null!,
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -117,7 +118,7 @@ public class CtorShould
                 Species = string.Empty,
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -134,7 +135,7 @@ public class CtorShould
                 Species = "  ",
                 CommonName = SpecieBuxus.CommonName,
                 Cycle = SpecieBuxus.Cycle,
-                Type = SpecieBuxus.Type
+                Type = SpecieBuxus.Type.ToString()
             };
             return new WebServices.Models.Specie(specieDTO);
         }));
@@ -156,7 +157,7 @@ public class CtorShould
             Species = SpecieBuxus.Species.ToLower(),
             CommonName = SpecieBuxus.CommonName,
             Cycle = SpecieBuxus.Cycle,
-            Type = SpecieBuxus.Type
+            Type = SpecieBuxus.Type.ToString()
         };
         var createdSpecie = new WebServices.Models.Specie(specieDTO);
         Assert.Equal(SpecieBuxusDTO.Species, createdSpecie.Species);
@@ -180,7 +181,7 @@ public class CtorShould
     public void SetTypeToDtoType_WhenCalled()
     {
         var createdSpecie = new WebServices.Models.Specie(SpecieBuxusDTO);
-        Assert.Equal(SpecieBuxusDTO.Type, createdSpecie.Type);
+        Assert.Equal(Enum.Parse(typeof(PlantType),SpecieBuxusDTO.Type,true), createdSpecie.Type);
     }
     
     [Fact]
