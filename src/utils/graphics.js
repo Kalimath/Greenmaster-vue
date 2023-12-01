@@ -1,22 +1,24 @@
 /**
- * Returns distance between two points
+ * Returns distance between two vertices
  *
- * @param {Point}pointA
- * @param {Point}pointB
+ * @param {Vertex}vertexA
+ * @param {Vertex}vertexB
  * @return {number}
  * */
-import Point from "@/model/Point";
 
-export function pythagoras(pointA, pointB) {
-    let a = pointA.x - pointB.x;
-    let b = pointA.y - pointB.y;
+
+import Vertex from "@/models/Vertex";
+
+export function pythagoras(vertexA, vertexB) {
+    let a = vertexA.x - vertexB.x;
+    let b = vertexA.y - vertexB.y;
 
     return Math.sqrt((a*a)+(b*b));
 }
 
 /**
  * Calculates distance between first and second coordinate.
- * Can be used to get the distance between x or y coordinates of point A and b
+ * Can be used to get the distance between x or y coordinates of vertex A and b
  *
  * @param {number}first
  * @param {number}second
@@ -43,8 +45,8 @@ export function getDistanceBetweenTwoCoordinates(first, second) {
  *  - firstPoint will represent lower-left corner
  *  - secondPoint will represent upper-right corner
  *
- * @param {Point}firstPoint
- * @param {Point}secondPoint
+ * @param {Vertex}firstPoint
+ * @param {Vertex}secondPoint
  * */
 export function arrangePoints(firstPoint, secondPoint) {
     // if true mirror over x axes
@@ -86,29 +88,29 @@ export function toScaled(value, scaleFactor) {
 }
 
 /**
- * Converts real to scaled point coordinates (2 digit precision)
+ * Converts real to scaled vertex coordinates (2 digit precision)
  *
- * @param {Point}point
+ * @param {Vertex}vertex
  * @param {number}scaleFactor
- * @return {Point}
+ * @return {Vertex}
  * */
-export function scalePoint(point, scaleFactor) {
-    if(!point) throw new TypeError("point coordinates can't be scaled: given point is empty/invalid")
+export function scaleVertex(vertex, scaleFactor) {
+    if(!vertex) throw new TypeError("vertex coordinates can't be scaled: given vertex is empty/invalid")
     validateScaleFactor(scaleFactor)
-    return new Point(toScaled(point.x,scaleFactor),toScaled(point.y,scaleFactor))
+    return new Vertex(toScaled(vertex.x,scaleFactor),toScaled(vertex.y,scaleFactor))
 }
 
 /**
- * Converts scaled to real point coordinates (2 digit precision)
+ * Converts scaled to real vertex coordinates (2 digit precision)
  *
- * @param {Point}point
+ * @param {Vertex}point
  * @param {number}scaleFactor
- * @return {Point}
+ * @return {Vertex}
  * */
 export function scalePointToReal(point, scaleFactor) {
-    if(!point) throw new TypeError("scaled point coordinates: given point is empty/invalid")
+    if(!point) throw new TypeError("scaled vertex coordinates: given vertex is empty/invalid")
     validateScaleFactor(scaleFactor)
-    return new Point(fromScaled(point.x,scaleFactor),fromScaled(point.y,scaleFactor))
+    return new Vertex(fromScaled(point.x,scaleFactor),fromScaled(point.y,scaleFactor))
 }
 
 /**
@@ -122,33 +124,33 @@ export function validateScaleFactor(scaleFactor) {
 }
 
 /**
- * Converts svg to cartesian point coordinates (2 digit precision)
+ * Converts svg to cartesian vertex coordinates (2 digit precision)
  *
- * @param {Point}svgPoint
+ * @param {Vertex}svgPoint
  * @param {number}svgHeight
- * @return {Point}
+ * @return {Vertex}
  * @throws RangeError
  * */
 export function svgToCartesian(svgPoint, svgHeight) {
     if(svgPoint){
-        return new Point(svgPoint.x, svgHeight-svgPoint.y)
+        return new Vertex(svgPoint.x, svgHeight-svgPoint.y)
     }else{
         throw new RangeError("svgPoint is null invalid/empty")
     }
 }
 
 /**
- * Converts cartesian to svg point coordinates (2 digit precision)
+ * Converts cartesian to svg vertex coordinates (2 digit precision)
  *
- * @param {Point}cartesianPoint
+ * @param {Vertex}cartesianPoint
  * @param {number}svgHeight
- * @return {Point}
+ * @return {Vertex}
  * @throws RangeError
  * */
 /*
 export function cartesianToSvg(cartesianPoint, svgHeight) {
     if(svgPoint){
-        return new Point(cartesianPoint.x, svgHeight-cartesianPoint.y)
+        return new Vertex(cartesianPoint.x, svgHeight-cartesianPoint.y)
     }else{
         throw new RangeError("cartesianPoint is null invalid/empty")
     }

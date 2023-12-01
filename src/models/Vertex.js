@@ -1,9 +1,9 @@
-export default class Point{
+export default class Vertex {
     x = 0
     y = 0
 
     /**
-     * Create point with x and y coordinates
+     * Create vertex with x and y coordinates
      *
      * @param {number}x
      * @param {number}y
@@ -17,7 +17,7 @@ export default class Point{
      * Checks if this with selected coordinate (x or y) is higher than corresponding of otherPoint
      *
      * @param {boolean}isX
-     * @param {Point}otherPoint
+     * @param {Vertex}otherPoint
      * */
     givenCoordinateIsHigherThan(isX,otherPoint){
         if(isX){
@@ -28,27 +28,27 @@ export default class Point{
     }
 
     /**
-     * Sets x coordinate of current point
+     * Sets x coordinate of current vertex
      *
      * @param {number}value
      * */
     setX(value) {
-        if(value<0) throw new TypeError("point could not be set: coordinates are invalid")
+        if(value<0) throw new TypeError("vertex could not be set: coordinates are invalid")
         this.x = value;
     }
 
     /**
-     * Sets y coordinate of current point
+     * Sets y coordinate of current vertex
      *
      * @param {number}value
      * */
     setY(value) {
-        if(value<0) throw new TypeError("point could not be set: coordinates are invalid")
+        if(value<0) throw new TypeError("vertex could not be set: coordinates are invalid")
         this.y = value;
     }
 
     /**
-     * Returns true if coordinates of current are equal to given point
+     * Returns true if coordinates of current are equal to given vertex
      *
      * @param otherPoint
      * */
