@@ -1,7 +1,11 @@
 <template>
   <div class="container">
+    <header style="padding-bottom: 20px">
+      <h1>Greenmaster [Beta]</h1>
+    </header>
     <div class="row">
-      <EditorPane class="col-lg-6 bg-light"></EditorPane>
+      <ListView class="col-lg-3 bg-light"></ListView>
+      <EditorPane class="col-lg-9 bg-light"></EditorPane>
 <!--      <GardenForm class="col-6 bg-info" msg="Welcome to Your Vue.js App"/>-->
     </div>
   </div>
@@ -12,10 +16,12 @@
 import GardenForm from './components/GardenForm.vue'
 */
 import EditorPane from "@/components/EditorPane";
+import ListView from "@/components/ListView.vue";
 
 export default {
   name: 'App',
   components: {
+    ListView,
     EditorPane
   }
 }
