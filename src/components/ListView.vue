@@ -1,8 +1,8 @@
 
 <template>
-  <div>
-    <div v-for="domain in domains" :key="domain">
-      <div class="btn btn-light">{{ domain }}</div>
+  <div id="list-view">
+    <div v-for="domain in domains" :key="domain" style="text-align: left">
+      <div class="btn btn-light listItem">{{ domain }}</div>
     </div>
   </div>
 </template>
@@ -13,9 +13,9 @@ export default {
   data () {
     return {
       domains: [
-        "domain 1", 
-        "domain 2", 
-        "domain 3"
+        "Stationsstraat 27", 
+        "Peulisbaan 124F", 
+        "Azalealaan 16"
       ]
     }
   },
@@ -29,5 +29,10 @@ export default {
 </script>
 
 <style scoped>
-
+#list-view{
+  padding: 17px;
+}
+.listItem {
+  padding-bottom: 8px;
+}
 </style>

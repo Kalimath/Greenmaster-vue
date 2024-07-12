@@ -1,4 +1,4 @@
-export class ImageConverter {
+export default class ImageConverter {
     /**
      * Converts the image to a Base64 string
      *

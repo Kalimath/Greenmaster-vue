@@ -1,21 +1,25 @@
 <template>
-  <div>
-    <h2>Domain</h2>
+  <div id="editor-pane">
+    <h2>Stationsstraat 27</h2>
     <div id="canvas" class="w-full">
-      <!--      <ErrorMessageDialog v-if="errorMessage"></ErrorMessageDialog>-->
+      <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
            :width="width+100" :height="height+100" class="svgZoomContainer">
-        <svg id="svg" :width="width" :height="height" @click="RegisterPoint"></svg>
+        <svg id="svg" :width="width" :height="height" @click="RegisterPoint" @mousemove="UpdatePosition" class="border border-dark"></svg>
       </div>
     </div>
+    <p v-if="cursorPosition != null">({{cursorPosition.x}},{{cursorPosition.y}})</p>
+    <input type="button" class="btn btn-danger" @click="ResetEditor" value="Reset vertices">
   </div>
 </template>
 
 <script>
-import * as Snap from 'snapsvg-cjs'
-import {scaleVertex} from "@/utils/graphics";
-import {mapGetters} from "vuex";
 import Vertex from "@/models/Vertex";
+import {mapGetters} from "vuex";
+import {scaleVertex} from "@/utils/graphics";
+import {SVG} from "@svgdotjs/svg.js";
+import * as Coordinates from "@/utils/CoordinateMethods";
+import floorPlan from "@/assets/images/plattegrond_dummy.png";
 
 export default {
   name: "EditorPane",
@@ -24,40 +28,57 @@ export default {
       errorMessage: '',
       width: 1000,
       height: 900,
-      size: 3,
-      formRackColor: "red",
-      markingColor: "#0059B2",
+      size: 5,
+      HighlightColor: "red",
+      DrawingColor: "#0059B2",
+      domain: null,
       garden: null,
-      snap: null,
+      svgObject: null,
       backgroundInstance: null,
       isFirstPoint: true,
-      vertex: null,
-      polygons: null,
+      EditorMode: true,
+      vertices: [],
+      SelectedVertex: null,
+      polygons: [],
       panZoomInstance: null,
+      lockDistance: 2,
+      cursorPosition: null,
     };
   },
   /**
    * Creates the svg instance and initialises the component
    */
   mounted: function () {
-    this.snap = Snap('#svg')
-    this.garden = this.snap.paper.group().attr({id: "garden"})
+    // eslint-disable-next-line no-undef
+    this.InitialiseSvgObject()
+    this.updateBackground()
   },
   methods: {
-    isMutable: undefined,
-    Render() {
-      this.garden.rect(0, 0, 100, 100)
+    /**
+     * Updates the svg's background image.
+     */
+    updateBackground() {
+      // let imageSvg = null
+      try {
+        if (document.getElementById("background")) {
+          document.getElementById("background").remove()
+        }
+       this.DrawBackground(this.domain, floorPlan, this.width, this.height, "floorplan")
+      } catch (e) {
+        console.log("no background to loaded")
+        console.log(e)
+      }
+      // return imageSvg;
     },
-    RegisterVertex() {
-      let scaledPoint = null
-
-      scaledPoint = scaleVertex(this.vertex, 1 /*this.scaleFactor*/)
-      console.log(scaledPoint.x, scaledPoint.y)
-      let p1 = this.snap.paper.circle(scaledPoint.x, scaledPoint.y, this.size)
-          .attr({fill: "red", id: "v1"});
-      this.garden.append(p1)
-
-    },
+    
+    UpdatePosition(event) {
+      try {
+        this.cursorPosition = this.FromOffsetCoordsOfEvent(event)
+      }catch (e) {
+        console.log((event.offsetX+ ", " + event.offsetY))
+        this.cursorPosition = null
+      }
+    },  
     /**
      * Registers a point with coordinates from DOM and stores it in real live scale
      *
@@ -67,64 +88,107 @@ export default {
     RegisterPoint(event) {
       if (event.ctrlKey) {
 
-          try {
-            this.vertex = new Vertex(event.offsetX, event.offsetY);
-            // this.vertex = scalePointToReal(vertex, this.scaleFactor)
-          } catch (e) {
-            console.log(e)
-            this.errorMessage = e
-          }
-          this.RegisterVertex()
+        try {
+          var vertex = this.FromOffsetCoordsOfEvent(event);
+          
+          this.vertices.push(vertex);
+          var vertexIndex = this.vertices.indexOf(vertex);
+          
+          // this.vertex = scalePointToReal(vertex, this.scaleFactor)
+        } catch (e) {
+          console.log(e)
+          this.errorMessage = e
+        }
+        this.RegisterVertex(vertex)
+        if (this.EditorMode && !this.isFirstPoint) {
+          this.ConnectPointToPrevious(vertexIndex-1, vertexIndex)
+        }
+        this.isFirstPoint = false;
+        this.ResetErrorMessage();
       }
     },
-    /**
-     * Registers a vertex with coordinates from DOM and stores it in real live scale
-     *
-     * @param{MouseEvent}event
-     * @return {void}
-     * */
-    /*registerPoint(event) {
-      if(event.ctrlKey){
-        if (this.isMutable && (this.zoneFormActive || this.warehouseNotCreated)) {
-          try {
-            let vertex = new Vertex(event.offsetX, event.offsetY);
+    RegisterVertex(vertex) {
+      let scaledPoint = null
+      scaledPoint = scaleVertex(vertex, 1 /* * this.scaleFactor*/)
+      const vertexInfo = `(${scaledPoint.x},${scaledPoint.y})`;
+      console.log(vertexInfo);
+      this.DrawPoint(this.domain, scaledPoint, vertexInfo);
+    },
+    ConnectPointToPrevious(trailingVertexIndex, newVertexIndex) {
+      const trailingVertex = this.vertices[trailingVertexIndex];
+      const newVertex = this.vertices[newVertexIndex];
 
-            if (this.warehouseNotCreated && !this.point1) {
-              this.isFirstPoint = true
-            }
-            //reset second vertex
-            store.state.form.point2 = null
-            switch (this.isFirstPoint) {
-              case true:
-                store.commit("setPoint1", scalePointToReal(vertex, this.scaleFactor));
-                break
-              case false:
-                let pointA = scaleVertex(new Vertex(this.point1.x, this.point1.y), this.scaleFactor)
-                arrangePoints(pointA, vertex);
-                if (!pointA.equalsTo(this.point1)) {
-                  store.commit("setPoint1", scalePointToReal(pointA, this.scaleFactor))
-                }
-                store.commit("setPoint2", scalePointToReal(vertex, this.scaleFactor))
-                break
-            }
-          } catch (e) {
-            console.log(e)
-            this.errorMessage = e
-          }
-          this.renderShapes()
-          this.isFirstPoint = !this.isFirstPoint;
-        } else if (!this.isMutable) {
-          this.errorMessage = "Unable to define points when they are immutable or confirmed"
-        }
-      }
-    }*/
+      this.DrawLine(this.domain, trailingVertex, newVertex);
+    },
+    DrawBackground(group, imageBase64, width, height, id) {
+      return group.image(imageBase64).move(0, 0).attr({width:width, height:height, id: id})
+    },
+    
+    DrawPoint(group, vertex, id = null) {
+      return group.circle(this.size).move(vertex.x, vertex.y).attr({fill: this.DrawingColor, id: id}).click(function () {
+        this.fill({ color: "red"})
+        this.SelectedVertex = this;
+      });
+    },
+    DrawLine(group, vertex1, vertex2) {
+      return group.line(vertex1.x, vertex1.y, vertex2.x, vertex2.y).stroke({color: this.DrawingColor, width: this.size, linecap: 'round'})
+    },
+    ResetVertices() {
+      this.vertices = [];
+      this.svgObject = 
+      this.isFirstPoint = true;
+    },
+    ResetSvg() {
+      this.svgObject = null;
+      this.domain = null;
+      this.garden = null;
+      document.getElementById("svg").innerHTML = "";
+    },
+    InitialiseSvgObject() {
+      
+      this.svgObject = SVG().addTo('#svg').size(this.width, this.height);
+      this.domain = this.svgObject.group()
+      this.domain.rect(0, 0, this.width/3, this.height/3).attr({id: "/3", fill: "blue"})
+      this.garden = this.domain.nested()
+      this.garden.rect(0, 25, this.width/4, this.height/4).attr({id: "/3", fill: "green"})
+    },
+    ResetEditor() {
+      this.ResetVertices()
+      this.ResetSvg()
+      this.InitialiseSvgObject()
+    },
+    ResetErrorMessage() {
+      this.errorMessage = ''
+    },
+    FromOffsetCoordsOfEvent(event) {
+      return new Vertex(
+          Coordinates.InRange(event.offsetX, 0, this.width),
+          Coordinates.InRange(event.offsetY, 0, this.height))
+    }
   },
   computed: {
-    ...mapGetters(["scaleFactor"])
+    getScaleFactor () {
+      return this.$store.getters.scaleFactor
+    },
+    ...mapGetters(["scaleFactor", "domainName" ])
   }
 }
 </script>
 
 <style scoped>
-
+#editor-pane {
+  padding: 0px;
+}
+svg {
+  cursor: crosshair;
+  background-size: cover;
+  background-position: center;
+}
+svg:active{
+  cursor: grab;
+}
+.svgZoomContainer{
+  overflow: hidden;
+  background-color: lightsteelblue;
+}
 </style>

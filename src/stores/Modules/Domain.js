@@ -6,7 +6,8 @@ import Vertex from "@/models/Vertex";
 const state = ({
         vertices: [new Vertex(100, 200)],
         plan: null,
-        scaleFactor: 1
+        scaleFactor: 1,
+        domainName: "Stationstraat 27",
 })
 
 const mutations = {
@@ -18,6 +19,9 @@ const mutations = {
     },
     setScaleFactor(state, scaleFactor) {
         state.scaleFactor = scaleFactor
+    },
+    setDomainName(state, domainName) {
+        state.domainName = domainName;
     }
 }
 const actions = {}
@@ -26,7 +30,8 @@ const getters = {
     plan: state => state.plan,
     scaleFactor(state) {
         return state.scaleFactor
-    }
+    },
+    domainName: state => state.domainName
 }
 
 export default {
