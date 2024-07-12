@@ -20,6 +20,7 @@ import {scaleVertex} from "@/utils/graphics";
 import {SVG} from "@svgdotjs/svg.js";
 import * as Coordinates from "@/utils/CoordinateMethods";
 import floorPlan from "@/assets/images/plattegrond_dummy.png";
+import Artist from "@/utils/Artist";
 
 export default {
   name: "EditorPane",
@@ -63,7 +64,7 @@ export default {
         if (document.getElementById("background")) {
           document.getElementById("background").remove()
         }
-       this.DrawBackground(this.domain, floorPlan, this.width, this.height, "floorplan")
+        Artist.DrawImage(this.domain, floorPlan, this.width, this.height, "floorplan")
       } catch (e) {
         console.log("no background to loaded")
         console.log(e)
@@ -112,26 +113,13 @@ export default {
       scaledPoint = scaleVertex(vertex, 1 /* * this.scaleFactor*/)
       const vertexInfo = `(${scaledPoint.x},${scaledPoint.y})`;
       console.log(vertexInfo);
-      this.DrawPoint(this.domain, scaledPoint, vertexInfo);
+      Artist.DrawPoint(this.domain, scaledPoint, vertexInfo, this.DrawingColor, vertexInfo);
     },
     ConnectPointToPrevious(trailingVertexIndex, newVertexIndex) {
       const trailingVertex = this.vertices[trailingVertexIndex];
       const newVertex = this.vertices[newVertexIndex];
 
-      this.DrawLine(this.domain, trailingVertex, newVertex);
-    },
-    DrawBackground(group, imageBase64, width, height, id) {
-      return group.image(imageBase64).move(0, 0).attr({width:width, height:height, id: id})
-    },
-    
-    DrawPoint(group, vertex, id = null) {
-      return group.circle(this.size).move(vertex.x, vertex.y).attr({fill: this.DrawingColor, id: id}).click(function () {
-        this.fill({ color: "red"})
-        this.SelectedVertex = this;
-      });
-    },
-    DrawLine(group, vertex1, vertex2) {
-      return group.line(vertex1.x, vertex1.y, vertex2.x, vertex2.y).stroke({color: this.DrawingColor, width: this.size, linecap: 'round'})
+      Artist.DrawLine(this.domain, trailingVertex, newVertex, this.DrawingColor);
     },
     ResetVertices() {
       this.vertices = [];
