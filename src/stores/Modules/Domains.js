@@ -2,12 +2,11 @@
 import Vertex from "@/models/Vertex";
 
 
-
 const state = ({
         vertices: [new Vertex(100, 200)],
         plan: null,
         scaleFactor: 1,
-        domainName: "Stationstraat 27",
+        domainName: "Stationstraat 30",
 })
 
 const mutations = {

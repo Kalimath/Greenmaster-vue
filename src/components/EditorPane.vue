@@ -1,6 +1,6 @@
 <template>
   <div id="editor-pane">
-    <h2>Stationsstraat 27</h2>
+    <h2>{{ currentDomain === undefined ? "no active domain found" : currentDomain.name }}</h2>
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
@@ -15,7 +15,7 @@
 
 <script>
 import Vertex from "@/models/Vertex";
-import {mapGetters} from "vuex";
+import {mapGetters, mapState} from "vuex";
 import {scaleVertex} from "@/utils/graphics";
 import {SVG} from "@svgdotjs/svg.js";
 import * as Coordinates from "@/utils/CoordinateMethods";
@@ -32,8 +32,6 @@ export default {
       size: 5,
       HighlightColor: "red",
       DrawingColor: "#0059B2",
-      domain: null,
-      garden: null,
       svgObject: null,
       backgroundInstance: null,
       isFirstPoint: true,
@@ -54,6 +52,7 @@ export default {
     this.InitialiseSvgObject()
     this.updateBackground()
   },
+  //TODO: only show crosshair when left ctrl key is pressed
   methods: {
     /**
      * Updates the svg's background image.
@@ -87,11 +86,11 @@ export default {
      * @return {void}
      * */
     RegisterPoint(event) {
+      const vertex = this.FromOffsetCoordsOfEvent(event);
       if (event.ctrlKey) {
 
         try {
-          var vertex = this.FromOffsetCoordsOfEvent(event);
-          
+
           this.vertices.push(vertex);
           var vertexIndex = this.vertices.indexOf(vertex);
           
@@ -155,10 +154,12 @@ export default {
     }
   },
   computed: {
-    getScaleFactor () {
-      return this.$store.getters.scaleFactor
-    },
-    ...mapGetters(["scaleFactor", "domainName" ])
+    ...mapState(
+        {
+          domains: "domains", 
+          currentDomain: state => state.domains.find(domain => domain.id === state.currentDomainId)
+        }),
+    ...mapGetters(["scaleFactor", "domains", "currentDomain" ])
   }
 }
 </script>
