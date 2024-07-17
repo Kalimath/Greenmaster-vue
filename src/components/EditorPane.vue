@@ -20,7 +20,7 @@ import {SVG} from "@svgdotjs/svg.js";
 import * as Coordinates from "@/utils/CoordinateMethods";
 import floorPlan from "@/assets/images/plattegrond_dummy.png";
 import Artist from "@/utils/Artist";
-import {useDomainsStore} from "@/stores";
+import {useDomainsStore} from "@/stores/Domains";
 
 export default {
   name: "EditorPane",
@@ -41,7 +41,7 @@ export default {
       polygons: [],
       panZoomInstance: null,
       lockDistance: 2,
-      cursorPosition: null,
+      cursorPosition: null
     };
   },
   setup() {

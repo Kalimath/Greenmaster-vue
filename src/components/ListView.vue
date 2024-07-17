@@ -2,14 +2,15 @@
 <template>
   <div id="list-view">
     <div v-for="domain in savedDomains" :key="domain.id" style="text-align: left">
-      <div class="btn btn-light listItem">{{ domain.name }}</div>
+      <input type="button" class="btn btn-light listItem" @click="this.domainStore.setCurrentDomainId(domain.id)" :value="domain.name">
     </div>
   </div>
 </template>
 
 
 <script>
-import {useDomainsStore} from "@/stores";
+import {useDomainsStore} from "@/stores/Domains";
+import {mapActions} from "pinia";
 
 export default {
   name: 'ListView',
@@ -22,13 +23,15 @@ export default {
     return {domainStore};
   },
   methods: {
+    
   },
   components: {
   },
   computed: {
     savedDomains(){
       return this.domainStore.domains
-    }
+    },
+    ...mapActions(useDomainsStore, ['setCurrentDomainId']),
   }
 }
 </script>
