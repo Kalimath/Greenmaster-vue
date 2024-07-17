@@ -1,6 +1,6 @@
 <template>
   <div id="editor-pane">
-    <h2>{{ savedDomains === undefined ? "no active domain found" : currentDomain.name }}</h2>
+    <h2>{{ savedDomains === undefined ? "no active domain found" : getCurrentDomain.name }}</h2>
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
@@ -18,14 +18,17 @@ import Vertex from "@/models/Vertex";
 import {scaleVertex} from "@/utils/graphics";
 import {SVG} from "@svgdotjs/svg.js";
 import * as Coordinates from "@/utils/CoordinateMethods";
-import floorPlan from "@/assets/images/plattegrond_dummy.png";
+import floorPlan from "C:/Users/mathi/WebstormProjects/Greenmaster-vue/src/assets/images/plattegrond_dummy.png";
 import Artist from "@/utils/Artist";
 import {useDomainsStore} from "@/stores/Domains";
+import {useDesignsStore} from "@/stores/Designs";
+import {storeToRefs} from "pinia";
 
 export default {
   name: "EditorPane",
   data() {
     return {
+      domain: undefined,
       errorMessage: '',
       width: 1000,
       height: 900,
@@ -46,7 +49,10 @@ export default {
   },
   setup() {
     const domainStore = useDomainsStore();
-    return {domainStore};
+    const designStore = useDesignsStore(); 
+    const {currentDomainId} = storeToRefs(domainStore)
+    const {designs} = storeToRefs(designStore);
+    return {domainStore, designStore, currentDomainId, designs};
   },
   /**
    * Creates the svg instance and initialises the component
@@ -54,20 +60,20 @@ export default {
   mounted() {
     // eslint-disable-next-line no-undef
     this.InitialiseSvgObject()
-    this.updateBackground()
+    this.updateBackground(this.getCurrentDesign.backgroundImage);
   },
   //TODO: only show crosshair when left ctrl key is pressed
   methods: {
     /**
      * Updates the svg's background image.
      */
-    updateBackground() {
+    updateBackground(imageUrl = floorPlan) {
       // let imageSvg = null
       try {
         if (document.getElementById("background")) {
           document.getElementById("background").remove()
         }
-        Artist.DrawImage(this.domain, floorPlan, this.width, this.height, "floorplan")
+        Artist.DrawImage(this.domain, imageUrl, this.width, this.height, "background")
       } catch (e) {
         console.log("no background to loaded")
         console.log(e)
@@ -124,7 +130,7 @@ export default {
 
       Artist.DrawLine(this.domain, trailingVertex, newVertex, this.DrawingColor);
     },
-    ResetVertices() {
+    SetVertices() {
       this.vertices = [];
       this.svgObject = 
       this.isFirstPoint = true;
@@ -136,15 +142,20 @@ export default {
       document.getElementById("svg").innerHTML = "";
     },
     InitialiseSvgObject() {
-      
       this.svgObject = SVG().addTo('#svg').size(this.width, this.height);
+      this.CreateDomainSvgGroup()
+      this.CreateGardenSvgNesting()
+    },
+    CreateDomainSvgGroup(){
       this.domain = this.svgObject.group()
       this.domain.rect(0, 0, this.width/3, this.height/3).attr({id: "/3", fill: "blue"})
+    },
+    CreateGardenSvgNesting() {
       this.garden = this.domain.nested()
       this.garden.rect(0, 25, this.width/4, this.height/4).attr({id: "/3", fill: "green"})
     },
     ResetEditor() {
-      this.ResetVertices()
+      this.SetVertices()
       this.ResetSvg()
       this.InitialiseSvgObject()
     },
@@ -161,17 +172,34 @@ export default {
     savedDomains(){
       return this.domainStore.domains
     },
-    currentDomain(){
+    getCurrentDomain(){
       return this.domainStore.currentDomain
+    },
+    getCurrentDesignOfCurrentDomain(){
+      const currentDesignId = this.designStore.currentDesignId;
+      return this.designStore.designs.find(design => design.domainId === this.getCurrentDomain.id && design.id === currentDesignId)
+    },
+    getCurrentDesign(){
+      return this.designStore.getDesignByDomainId(this.domainStore.currentDomainId)
     }
         
+  },
+  watch: {
+    currentDomainId(newDomainId) {
+      //TODO: update domain and garden from the svgObject
+      console.log("new domainId: ", newDomainId)
+      console.log(this.getCurrentDesign)
+      
+      this.updateBackground(this.getCurrentDesign.backgroundImage);
+  
+    }
   }
 }
 </script>
 
 <style scoped>
 #editor-pane {
-  padding: 0px;
+  padding: 0;
 }
 svg {
   cursor: crosshair;
