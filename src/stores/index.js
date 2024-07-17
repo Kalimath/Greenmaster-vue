@@ -1,31 +1,27 @@
-import Vuex from 'vuex';
+import { defineStore } from 'pinia'
 import Vertex from "@/models/Vertex";
 
-
-const store = new Vuex.Store({
-    state: {
-        vertices: [new Vertex(100, 200)],
-        plan: null,
-        scaleFactor: 1,
+export const useDomainsStore = defineStore('domains',{
+    state: () => ({
         domains: [
             {
                 id: 1,
-                name: "Stationstraat 27",
-                vertices: []
+                name: "Stationsstraat 27",
+                vertices: [new Vertex(1, 100)]
             },
             {
                 id: 2,
                 name: "Peulisbaan 124F",
-                vertices: []
+                vertices: [new Vertex(1, 100)]
             },
             {
                 id: 3,
                 name: "Azalealaan 16",
-                vertices: []
+                vertices: [new Vertex(1, 100)]
             }
         ],
         currentDomainId: 1,
-    },
+    }),
     mutations: {
         addVertex(state, vertex) {
             state.vertices.push(vertex)
@@ -44,14 +40,11 @@ const store = new Vuex.Store({
     actions: {},
 
     getters: {
-        vertices: state => state.vertices,
-        plan: state => state.plan,
-        scaleFactor: state => state.scaleFactor,
-        currentDomain: state => state.domains.find(d => d.id === state.currentDomainId) || null,
-        domains: state => state.domains
+        currentDomain: (state) => {
+            console.log(state.domains)
+            return state.domains.find(d => d.id === state.currentDomainId) || null;
+        }
     }
 });
 
-
-export default store;
 

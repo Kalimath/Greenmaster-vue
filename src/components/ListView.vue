@@ -1,14 +1,15 @@
 
 <template>
   <div id="list-view">
-    <div v-for="domain in domains" :key="domain.id" style="text-align: left">
+    <div v-for="domain in savedDomains" :key="domain.id" style="text-align: left">
       <div class="btn btn-light listItem">{{ domain.name }}</div>
     </div>
   </div>
 </template>
 
+
 <script>
-import {mapState} from "vuex";
+import {useDomainsStore} from "@/stores";
 
 export default {
   name: 'ListView',
@@ -16,12 +17,18 @@ export default {
     return {
     }
   },
+  setup() {
+    const domainStore = useDomainsStore();
+    return {domainStore};
+  },
   methods: {
   },
   components: {
   },
   computed: {
-    ...mapState({domains: state => state.domains})
+    savedDomains(){
+      return this.domainStore.domains
+    }
   }
 }
 </script>

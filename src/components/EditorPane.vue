@@ -1,6 +1,6 @@
 <template>
   <div id="editor-pane">
-    <h2>{{ currentDomain === undefined ? "no active domain found" : currentDomain.name }}</h2>
+    <h2>{{ savedDomains === undefined ? "no active domain found" : currentDomain.name }}</h2>
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
@@ -15,12 +15,12 @@
 
 <script>
 import Vertex from "@/models/Vertex";
-import {mapGetters, mapState} from "vuex";
 import {scaleVertex} from "@/utils/graphics";
 import {SVG} from "@svgdotjs/svg.js";
 import * as Coordinates from "@/utils/CoordinateMethods";
 import floorPlan from "@/assets/images/plattegrond_dummy.png";
 import Artist from "@/utils/Artist";
+import {useDomainsStore} from "@/stores";
 
 export default {
   name: "EditorPane",
@@ -44,10 +44,14 @@ export default {
       cursorPosition: null,
     };
   },
+  setup() {
+    const domainStore = useDomainsStore();
+    return {domainStore};
+  },
   /**
    * Creates the svg instance and initialises the component
    */
-  mounted: function () {
+  mounted() {
     // eslint-disable-next-line no-undef
     this.InitialiseSvgObject()
     this.updateBackground()
@@ -154,12 +158,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(
-        {
-          domains: "domains", 
-          currentDomain: state => state.domains.find(domain => domain.id === state.currentDomainId)
-        }),
-    ...mapGetters(["scaleFactor", "domains", "currentDomain" ])
+    savedDomains(){
+      return this.domainStore.domains
+    },
+    currentDomain(){
+      return this.domainStore.currentDomain
+    }
+        
   }
 }
 </script>
