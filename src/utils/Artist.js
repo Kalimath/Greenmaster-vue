@@ -29,6 +29,20 @@ class Artist {
         });
     }
 
+
+    /**
+     * Draws a line between two points/vertices.
+     *
+     * @param{group} group
+     * @param vertex1
+     * @param vertex2
+     * @param{number} size
+     * @param drawingColor
+     * */
+    static DrawLineBetweenTwoPoints(group, vertex1, vertex2, size, drawingColor = "black"  ) {
+        Artist.DrawLine(group, vertex1, vertex2, size, drawingColor);
+    }
+
     /**
     * Adds a line instance to the group with given from vertex1 to vertex2 with given size and color.
     *

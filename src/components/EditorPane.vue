@@ -4,7 +4,7 @@
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
-           :width="width+100" :height="height+100" class="svgZoomContainer" viewBox="0 0 100 100"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
+           :width="width+100" :height="height+100" class="svgZoomContainer" viewBox="0 0 1000 1000"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
       </div>
     </div>
     <p v-if="cursorPosition != null">({{cursorPosition.x}},{{cursorPosition.y}})</p>
@@ -31,7 +31,7 @@ export default {
       errorMessage: '',
       width: 1000,
       height: 900,
-      size: 5,
+      lineSize: 5,
       HighlightColor: "red",
       DrawingColor: "#0059B2",
       svgObject: null,
@@ -110,7 +110,7 @@ export default {
         }
         this.RegisterVertex(vertex)
         if (this.EditorMode && !this.isFirstPoint) {
-          this.ConnectPointToPrevious(vertexIndex-1, vertexIndex)
+          Artist.DrawLineBetweenTwoPoints(this.domain, this.vertices[vertexIndex-1], this.vertices[vertexIndex], this.lineSize, this.HighlightColor)
         }
         this.isFirstPoint = false;
         this.ResetErrorMessage();
@@ -121,13 +121,7 @@ export default {
       scaledPoint = scaleVertex(vertex, 1 /* * this.scaleFactor*/)
       const vertexInfo = `(${scaledPoint.x},${scaledPoint.y})`;
       console.log(vertexInfo);
-      Artist.DrawPoint(this.domain, scaledPoint, vertexInfo, this.DrawingColor, vertexInfo);
-    },
-    ConnectPointToPrevious(trailingVertexIndex, newVertexIndex) {
-      const trailingVertex = this.vertices[trailingVertexIndex];
-      const newVertex = this.vertices[newVertexIndex];
-
-      Artist.DrawLine(this.domain, trailingVertex, newVertex, this.DrawingColor);
+      Artist.DrawPoint(this.domain, scaledPoint, this.lineSize, this.DrawingColor, vertexInfo);
     },
     SetVertices() {
       this.vertices = [];
@@ -211,6 +205,6 @@ svg:active{
 }
 .svgZoomContainer{
   overflow: hidden;
-  background-color: antiquewhite;
+  background-color: lightgreen;
 }
 </style>
