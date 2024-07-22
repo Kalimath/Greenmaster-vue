@@ -4,8 +4,7 @@
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
-           :width="width+100" :height="height+100" class="svgZoomContainer">
-        <svg id="svg" :width="width" :height="height" @click="RegisterPoint" @mousemove="UpdatePosition" class="border border-dark"></svg>
+           :width="width+100" :height="height+100" class="svgZoomContainer" viewBox="0 0 100 100"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
       </div>
     </div>
     <p v-if="cursorPosition != null">({{cursorPosition.x}},{{cursorPosition.y}})</p>
@@ -139,10 +138,11 @@ export default {
       this.svgObject = null;
       this.domain = null;
       this.garden = null;
-      document.getElementById("svg").innerHTML = "";
+      document.getElementById("svgZoomContainer").innerHTML = "";
     },
     InitialiseSvgObject() {
-      this.svgObject = SVG().addTo('#svg').size(this.width, this.height);
+      this.svgObject = SVG().addTo('#svgZoomContainer').size(this.width, this.height);
+      this.svgObject.attr({id: "svg"});
       this.CreateDomainSvgGroup()
       this.CreateGardenSvgNesting()
     },
@@ -211,6 +211,6 @@ svg:active{
 }
 .svgZoomContainer{
   overflow: hidden;
-  background-color: lightsteelblue;
+  background-color: antiquewhite;
 }
 </style>

@@ -33,7 +33,7 @@ export const useDesignsStore = defineStore('designs',{
                 obstructedArea: [],
                 fullArea: null,
                 outerDimensions: null,
-                backgroundImage: "https://www.archdaily.com/889040/the-house-with-plants-kamakurastudio/5a83c352f197ccb0b700033c-the-house-with-plants-kamakurastudio-2nd-floor-plan"  
+                backgroundImage: null  
             },
         ],
         currentDesignId: 1,
