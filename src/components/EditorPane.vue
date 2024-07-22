@@ -4,11 +4,11 @@
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
       <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
-           :width="width+100" :height="height+100" class="svgZoomContainer" viewBox="0 0 1000 1000"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
+           :width="width+100" :height="height+100" class="svgZoomContainer"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
       </div>
     </div>
     <p v-if="cursorPosition != null">({{cursorPosition.x}},{{cursorPosition.y}})</p>
-    <input type="button" class="btn btn-danger" @click="ResetEditor" value="Reset vertices">
+    <input type="button" class="btn btn-danger" @click="ResetEditorWithInitialBackground" value="Reset vertices">
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
       SelectedVertex: null,
       polygons: [],
       panZoomInstance: null,
-      lockDistance: 2,
+      lockDistance: 5,
       cursorPosition: null
     };
   },
@@ -119,6 +119,7 @@ export default {
     RegisterVertex(vertex) {
       let scaledPoint = null
       scaledPoint = scaleVertex(vertex, 1 /* * this.scaleFactor*/)
+      vertex.round(this.lockDistance)
       const vertexInfo = `(${scaledPoint.x},${scaledPoint.y})`;
       console.log(vertexInfo);
       Artist.DrawPoint(this.domain, scaledPoint, this.lineSize, this.DrawingColor, vertexInfo);
@@ -152,6 +153,12 @@ export default {
       this.SetVertices()
       this.ResetSvg()
       this.InitialiseSvgObject()
+    },
+    ResetEditorWithInitialBackground() {
+      this.SetVertices()
+      this.ResetSvg()
+      this.InitialiseSvgObject()
+      this.updateBackground(this.getCurrentDesign.backgroundImage);
     },
     ResetErrorMessage() {
       this.errorMessage = ''

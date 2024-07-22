@@ -40,6 +40,7 @@ class Artist {
      * @param drawingColor
      * */
     static DrawLineBetweenTwoPoints(group, vertex1, vertex2, size, drawingColor = "black"  ) {
+        
         Artist.DrawLine(group, vertex1, vertex2, size, drawingColor);
     }
 

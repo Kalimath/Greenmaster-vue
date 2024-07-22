@@ -1,3 +1,5 @@
+import * as MathHelpers from "@/utils/MathHelpers";
+
 export default class Vertex {
     x = 0
     y = 0
@@ -54,5 +56,17 @@ export default class Vertex {
      * */
     equalsTo(otherPoint){
         return this.x === otherPoint.x && this.y === otherPoint.y
+    }
+    
+    /**
+     * Rounds coordinates to the given precision (default is 5) TODO
+     *
+     * @param{number} precision
+     * */
+    round(precision = 5) {
+        this.setX(MathHelpers.round(this.x, precision));
+        this.setY(MathHelpers.round(this.y, precision));
+        
+        console.log(`Rounded x: ${this.x} and y: ${this.y}`)
     }
 }
