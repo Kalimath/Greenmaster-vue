@@ -1,9 +1,10 @@
 <template>
+  
   <div id="editor-pane">
     <h2>{{ savedDomains === undefined ? "no active domain found" : getCurrentDomain.name }}</h2>
     <div id="canvas" class="w-full">
       <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
-      <div id="svgZoomContainer" data-zoom-on-wheel="zoom-amount: 0.01; min-scale: 0.3; max-scale: 20;" data-pan-on-drag
+      <div id="svgZoomContainer"
            :width="width+100" :height="height+100" class="svgZoomContainer"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
       </div>
     </div>
@@ -11,11 +12,11 @@
     <input type="button" class="btn btn-danger" @click="ResetEditorWithInitialBackground" value="Reset vertices">
   </div>
 </template>
-
 <script>
 import Vertex from "@/models/Vertex";
 import {scaleVertex} from "@/utils/graphics";
 import {SVG} from "@svgdotjs/svg.js";
+import '@svgdotjs/svg.panzoom.js'
 import * as Coordinates from "@/utils/CoordinateMethods";
 import floorPlan from "C:/Users/mathi/WebstormProjects/Greenmaster-vue/src/assets/images/plattegrond_dummy.png";
 import Artist from "@/utils/Artist";
@@ -136,8 +137,14 @@ export default {
       document.getElementById("svgZoomContainer").innerHTML = "";
     },
     InitialiseSvgObject() {
-      this.svgObject = SVG().addTo('#svgZoomContainer').size(this.width, this.height);
-      this.svgObject.attr({id: "svg"});
+      const svgWidth = document.getElementById("svgZoomContainer").offsetWidth;
+      console.log("SVG object width: " + svgWidth + "px")
+      this.svgObject = SVG()
+          .addTo('#svgZoomContainer')
+          .size(svgWidth, this.height)
+          .viewbox('0 0 1000 1000')
+          .panZoom({ zoomMin: 0.5, zoomMax: 20, zoomFactor: 0.1 }); //doc: https://github.com/svgdotjs/svg.panzoom.js
+      this.svgObject.attr({id: "svg",   });
       this.CreateDomainSvgGroup()
       this.CreateGardenSvgNesting()
     },
@@ -212,6 +219,8 @@ svg:active{
 }
 .svgZoomContainer{
   overflow: hidden;
-  background-color: lightgreen;
+  margin: 10px;
+  border: 1px solid lightslategray;
+  background-color: white;
 }
 </style>

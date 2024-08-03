@@ -8,14 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@svgdotjs/svg.js": "^3.2.0",
+    "@svgdotjs/svg.js": "^3.2.4",
+    "@svgdotjs/svg.panzoom.js": "^2.1.2",
     "bootstrap": "^5.2.3",
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
     "pinia": "^2.1.7",
-    "snapsvg": "^0.5.1",
-    "snapsvg-cjs": "^0.0.6",
-    "domainsStore": "^2.0.12",
     "vue": "^3.2.45",
     "vue-select": "^4.0.0-beta.6",
     "vuex-persist": "^3.1.3"
