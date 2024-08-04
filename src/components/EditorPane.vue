@@ -2,14 +2,16 @@
   
   <div id="editor-pane">
     <h2>{{ savedDomains === undefined ? "no active domain found" : getCurrentDomain.name }}</h2>
+    <AlertMessageView :is-warning="warningMessage !== ''" :message="errorMessage||warningMessage" v-if="errorMessage||warningMessage"></AlertMessageView>
     <div id="canvas" class="w-full">
-      <p v-if="errorMessage" class="alert-danger">{{errorMessage}}</p>
-      <div id="svgZoomContainer"
-           :width="width+100" :height="height+100" class="svgZoomContainer"  @click="RegisterPoint" @mousemove="UpdatePosition"> 
+      <div id="svgZoomContainer" :width="width+100" :height="height+100" class="svgZoomContainer"  @click="RegisterPoint" @mousemove="UpdatePosition">
+        
       </div>
     </div>
     <p v-if="cursorPosition != null">({{cursorPosition.x}},{{cursorPosition.y}})</p>
     <input type="button" class="btn btn-danger" @click="ResetEditorWithInitialBackground" value="Reset vertices">
+    <input type="button" class="btn btn-danger" @click="resetPanZoom" value="Reset zoom">
+    <input type="button" class="btn btn-danger" @click="logZoomFactor" value="Log zoom">
   </div>
 </template>
 <script>
@@ -23,14 +25,18 @@ import Artist from "@/utils/Artist";
 import {useDomainsStore} from "@/stores/Domains";
 import {useDesignsStore} from "@/stores/Designs";
 import {storeToRefs} from "pinia";
+import AlertMessageView from "@/components/AlertMessageView.vue";
+// import {resetScale} from "svg-pan-zoom-container";
 
 export default {
   name: "EditorPane",
+  components: {AlertMessageView},
   data() {
     return {
       domain: undefined,
       errorMessage: '',
-      width: 1000,
+      warningMessage: "",
+      width: 900,
       height: 900,
       lineSize: 5,
       HighlightColor: "red",
@@ -75,8 +81,8 @@ export default {
         }
         Artist.DrawImage(this.domain, imageUrl, this.width, this.height, "background")
       } catch (e) {
-        console.log("no background to loaded")
-        console.log(e)
+        this.errorMessage = e
+        console.log(e);
       }
       // return imageSvg;
     },
@@ -85,6 +91,7 @@ export default {
       try {
         this.cursorPosition = this.FromOffsetCoordsOfEvent(event)
       }catch (e) {
+        this.errorMessage = e
         console.log((event.offsetX+ ", " + event.offsetY))
         this.cursorPosition = null
       }
@@ -96,15 +103,13 @@ export default {
      * @return {void}
      * */
     RegisterPoint(event) {
-      const vertex = this.FromOffsetCoordsOfEvent(event);
+      let vertex = this.FromOffsetCoordsOfEvent(event);
       if (event.ctrlKey) {
 
         try {
-
+          //vertex = scalePointToReal(vertex, this.zoomFactor)
           this.vertices.push(vertex);
           var vertexIndex = this.vertices.indexOf(vertex);
-          
-          // this.vertex = scalePointToReal(vertex, this.scaleFactor)
         } catch (e) {
           console.log(e)
           this.errorMessage = e
@@ -142,8 +147,12 @@ export default {
       this.svgObject = SVG()
           .addTo('#svgZoomContainer')
           .size(svgWidth, this.height)
-          .viewbox('0 0 1000 1000')
-          .panZoom({ zoomMin: 0.5, zoomMax: 20, zoomFactor: 0.1 }); //doc: https://github.com/svgdotjs/svg.panzoom.js
+      /*.viewbox('0 0 1000 1000')
+      .panZoom({zoomMin: 0.5, zoomMax: 20, zoomFactor: 0.01 })
+      .zoom(1)*/
+          /*.on('mousemove', this.UpdatePosition)
+          .on('click', this.RegisterPoint)*/
+           //doc: https://github.com/svgdotjs/svg.panzoom.js
       this.svgObject.attr({id: "svg",   });
       this.CreateDomainSvgGroup()
       this.CreateGardenSvgNesting()
@@ -174,6 +183,15 @@ export default {
       return new Vertex(
           Coordinates.InRange(event.offsetX, 0, this.width),
           Coordinates.InRange(event.offsetY, 0, this.height))
+    },
+    /**
+     * Resets zoom and panning of the svg element
+     */
+    resetPanZoom(){
+      this.svgObject.zoom(1)
+    },
+    logZoomFactor(){
+      console.log("Zoom factor: ", this.zoomFactor)
     }
   },
   computed: {
@@ -183,12 +201,11 @@ export default {
     getCurrentDomain(){
       return this.domainStore.currentDomain
     },
-    getCurrentDesignOfCurrentDomain(){
-      const currentDesignId = this.designStore.currentDesignId;
-      return this.designStore.designs.find(design => design.domainId === this.getCurrentDomain.id && design.id === currentDesignId)
-    },
     getCurrentDesign(){
       return this.designStore.getDesignByDomainId(this.domainStore.currentDomainId)
+    },
+    zoomFactor(){
+      return this.svgObject.zoom()
     }
         
   },

@@ -2,9 +2,12 @@
 <template>
   <div id="list-view">
     <h3 class="text-lg-start">Domains</h3>
-    <div v-for="domain in savedDomains" :key="domain.id" style="text-align: left">
-      <input type="button" class="btn btn-light listItem" @click="this.domainStore.setCurrentDomainId(domain.id)" :value="domain.name">
-    </div>
+   <div class="overflow-scroll">
+     <div v-for="domain in savedDomains" :key="domain.id">
+       <input type="button" class="btn btn-sm editButton" value="✎"/><input type="button" class="btn btn-light listItem" @click="this.domainStore.setCurrentDomainId(domain.id)" :value="domain.name">
+     </div>
+     <input type="button" class="btn listItem" @click="addNewDomain" value="+">
+   </div>
   </div>
 </template>
 
@@ -24,7 +27,9 @@ export default {
     return {domainStore};
   },
   methods: {
-    
+    addNewDomain() {
+      this.domainStore.addNewDomain();
+    }
   },
   components: {
   },
@@ -32,7 +37,7 @@ export default {
     savedDomains(){
       return this.domainStore.domains
     },
-    ...mapActions(useDomainsStore, ['setCurrentDomainId']),
+    ...mapActions(useDomainsStore, ['setCurrentDomainId', 'addNewDomain']),
   }
 }
 </script>
@@ -40,9 +45,13 @@ export default {
 <style scoped>
 #list-view{
   margin: 10px;
+  text-align: left
 }
 .listItem {
   padding-bottom: 8px;
+}
+.editButton:hover {
+  color: green;
 }
 h3 {
   padding-left: 10px;
